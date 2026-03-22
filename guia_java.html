@@ -1,0 +1,3265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Java — Examen</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --bg2: #16161d;
+    --bg3: #1e1e28;
+    --bg4: #25252f;
+    --border: #2e2e3a;
+    --border2: #3a3a4a;
+    --text: #e8e6f0;
+    --text2: #9896a8;
+    --text3: #5f5d70;
+    --purple: #a78bfa;
+    --purple-bg: #1e1a35;
+    --purple-border: #4c3d8a;
+    --teal: #34d399;
+    --teal-bg: #0d2620;
+    --teal-border: #1a5c48;
+    --amber: #fbbf24;
+    --amber-bg: #1f1a0a;
+    --amber-border: #5c4a0a;
+    --coral: #f87171;
+    --coral-bg: #1f0f0f;
+    --coral-border: #5c2020;
+    --blue: #60a5fa;
+    --blue-bg: #0d1a2e;
+    --blue-border: #1a3a5c;
+    --kw: #c084fc;
+    --cm: #4a4860;
+    --str: #34d399;
+    --num: #f87171;
+    --fn: #60a5fa;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 { font-size: 16px; font-weight: 600; color: var(--text); letter-spacing: .02em; }
+  header .chip {
+    background: var(--purple-bg);
+    border: 1px solid var(--purple-border);
+    color: var(--purple);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* ── Top-level topic tabs ── */
+  .topic-nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .topic-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 18px;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .topic-btn:hover { color: var(--text); }
+  .topic-btn.on { color: var(--purple); border-bottom-color: var(--purple); }
+
+  .topic-section { display: none; }
+  .topic-section.on { display: block; }
+
+  /* ── Inner subtopic tabs ── */
+  .inner-nav {
+    padding: 16px 24px 0;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .inner-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 12px;
+    padding: 5px 13px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .inner-btn:hover { border-color: var(--border2); color: var(--text); }
+  .inner-btn.on { background: var(--purple-bg); border-color: var(--purple-border); color: var(--purple); font-weight: 500; }
+
+  .inner-section { display: none; padding: 16px 24px 32px; }
+  .inner-section.on { display: block; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 10px;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+  /* ── Code blocks ── */
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 12.5px;
+    overflow-x: auto;
+    line-height: 1.65;
+    white-space: pre;
+    margin-top: 8px;
+  }
+  .kw  { color: var(--kw); font-weight: 500; }
+  .cm  { color: var(--cm); font-style: italic; }
+  .str { color: var(--str); }
+  .num { color: var(--num); }
+  .fn  { color: var(--fn); }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 9px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .bp { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+  .bt { background: var(--teal-bg);   color: var(--teal);   border: 1px solid var(--teal-border); }
+  .ba { background: var(--amber-bg);  color: var(--amber);  border: 1px solid var(--amber-border); }
+  .bc { background: var(--coral-bg);  color: var(--coral);  border: 1px solid var(--coral-border); }
+  .bb { background: var(--blue-bg);   color: var(--blue);   border: 1px solid var(--blue-border); }
+
+  /* ── Callouts ── */
+  .tip  { background: var(--teal-bg);  border-left: 3px solid var(--teal);  color: #7ee8c0; padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 12.5px; margin-top: 10px; }
+  .warn { background: var(--amber-bg); border-left: 3px solid var(--amber); color: #f0c060; padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 12.5px; margin-top: 8px; }
+  .err  { background: var(--coral-bg); border-left: 3px solid var(--coral); color: #f09090; padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 12.5px; margin-top: 8px; }
+  .info { background: var(--blue-bg);  border-left: 3px solid var(--blue);  color: #90c0f0; padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 12.5px; margin-top: 8px; }
+
+  /* ── Misc ── */
+  code {
+    font-family: 'Cascadia Code','Fira Code','Consolas',monospace;
+    font-size: 12px;
+    background: var(--bg4);
+    color: var(--purple);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  ul.dots { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+  ul.dots li { font-size: 12.5px; color: var(--text2); padding-left: 16px; position: relative; line-height: 1.5; }
+  ul.dots li::before { content: "›"; position: absolute; left: 0; color: var(--purple); font-weight: 700; }
+
+  /* Array visualizer */
+  .vis { display: flex; gap: 4px; align-items: center; margin: 10px 0; flex-wrap: wrap; }
+  .cell {
+    min-width: 36px; height: 36px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: monospace;
+    background: var(--bg3);
+    color: var(--text);
+  }
+  .cell.hl { background: var(--purple-bg); border-color: var(--purple-border); color: var(--purple); font-weight: 600; }
+  .idx { font-size: 9px; color: var(--text3); margin-top: 1px; }
+
+  /* Method reference table */
+  .mref { display: flex; flex-direction: column; gap: 6px; }
+  .mref-row { display: flex; gap: 12px; padding: 7px 10px; background: var(--bg3); border-radius: 7px; border: 1px solid var(--border); }
+  .mref-name { font-family: monospace; font-size: 12px; color: var(--blue); font-weight: 500; min-width: 240px; }
+  .mref-desc { font-size: 12px; color: var(--text2); }
+
+  /* Default values grid */
+  .def-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-top: 8px; }
+  .def-cell { text-align: center; padding: 9px 6px; background: var(--bg3); border-radius: 8px; border: 1px solid var(--border); font-size: 12px; color: var(--text2); }
+  .def-cell span { display: block; font-family: monospace; color: var(--purple); font-weight: 600; margin-top: 3px; font-size: 13px; }
+
+  /* String methods table */
+  .stbl { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 6px; }
+  .stbl th { text-align: left; color: var(--text3); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; padding: 6px 10px; border-bottom: 1px solid var(--border); font-weight: 600; }
+  .stbl td { padding: 6px 10px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+  .stbl td:first-child { font-family: monospace; font-size: 12px; color: var(--blue); white-space: nowrap; }
+  .stbl td:last-child { color: var(--teal); font-family: monospace; font-size: 11.5px; }
+  .stbl tr:last-child td { border-bottom: none; }
+  .stbl tr:hover td { background: var(--bg3); }
+
+  @media (max-width: 600px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .mref-row { flex-direction: column; gap: 4px; }
+    .mref-name { min-width: unset; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Guía Java — Examen</h1>
+  <span class="chip">Arrays</span>
+  <span class="chip" style="background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal)">Cadenas</span>
+  <span class="chip" style="background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)">Clases / POO</span>
+  <span class="chip" style="background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)">Herencia</span>
+  <span class="chip" style="background:var(--teal-bg);border-color:var(--teal-border);color:var(--teal);opacity:.85">Interfaces</span>
+  <span class="chip" style="background:var(--coral-bg);border-color:var(--coral-border);color:var(--coral)">Ficheros</span>
+  <span class="chip" style="background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue);opacity:.85">Binarios</span>
+</header>
+
+<!-- ══════════════════════════════════════════════
+     TOP-LEVEL TOPIC NAVIGATION
+══════════════════════════════════════════════ -->
+<nav class="topic-nav">
+  <button class="topic-btn on" onclick="showTopic('arrays',this)">Arrays</button>
+  <button class="topic-btn"    onclick="showTopic('cadenas',this)">Cadenas (String)</button>
+  <button class="topic-btn"    onclick="showTopic('clases',this)">Clases / POO</button>
+  <button class="topic-btn"    onclick="showTopic('herencia',this)">Herencia avanzada</button>
+  <button class="topic-btn"    onclick="showTopic('interfaces',this)">Interfaces / Orden.</button>
+  <button class="topic-btn"    onclick="showTopic('ficheros',this)">Ficheros / Excep.</button>
+  <button class="topic-btn"    onclick="showTopic('binarios',this)">Ficheros binarios</button>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════
+     TOPIC: ARRAYS
+══════════════════════════════════════════════ -->
+<div id="arrays" class="topic-section on">
+  <div class="inner-nav">
+    <button class="inner-btn on" onclick="showInner('arrays','a1',this)">Sintaxis base</button>
+    <button class="inner-btn"   onclick="showInner('arrays','a2',this)">Recorrer</button>
+    <button class="inner-btn"   onclick="showInner('arrays','a3',this)">Métodos Arrays.*</button>
+    <button class="inner-btn"   onclick="showInner('arrays','a4',this)">Funciones</button>
+    <button class="inner-btn"   onclick="showInner('arrays','a5',this)">Arrays 2D</button>
+    <button class="inner-btn"   onclick="showInner('arrays','a6',this)">Patrones</button>
+    <button class="inner-btn"   onclick="showInner('arrays','a7',this)">Errores comunes</button>
+  </div>
+
+  <!-- A1 SINTAXIS BASE -->
+  <div id="a1" class="inner-section on">
+    <div class="card">
+      <div class="card-title">Declarar e inicializar</div>
+      <div class="grid2">
+        <div>
+          <span class="badge bp">Tamaño fijo</span>
+          <pre><span class="kw">int</span>[]    arr = <span class="kw">new int</span>[<span class="num">5</span>];
+<span class="kw">double</span>[] d   = <span class="kw">new double</span>[<span class="num">3</span>];
+<span class="kw">String</span>[] s   = <span class="kw">new String</span>[<span class="num">4</span>];
+<span class="kw">char</span>[]   c   = <span class="kw">new char</span>[<span class="num">6</span>];</pre>
+        </div>
+        <div>
+          <span class="badge bt">Con valores</span>
+          <pre><span class="kw">int</span>[]  arr = {<span class="num">2</span>,<span class="num">4</span>,<span class="num">6</span>,<span class="num">8</span>};
+<span class="kw">char</span>[] c   = {<span class="str">'a'</span>,<span class="str">'b'</span>,<span class="str">'c'</span>};
+<span class="kw">String</span>[] s = {<span class="str">"uno"</span>,<span class="str">"dos"</span>};</pre>
+        </div>
+      </div>
+      <div class="vis">
+        <div class="cell hl"><span>2</span><span class="idx">[0]</span></div>
+        <div class="cell"><span>4</span><span class="idx">[1]</span></div>
+        <div class="cell"><span>6</span><span class="idx">[2]</span></div>
+        <div class="cell"><span>8</span><span class="idx">[3]</span></div>
+        <span style="font-size:11.5px;color:var(--text3);margin-left:8px">arr[0]=2 · arr[3]=8 · arr.length=4</span>
+      </div>
+      <div class="def-grid">
+        <div class="def-cell">int / long<span>0</span></div>
+        <div class="def-cell">double / float<span>0.0</span></div>
+        <div class="def-cell">boolean<span>false</span></div>
+        <div class="def-cell">char<span>'\u0000'</span></div>
+        <div class="def-cell">String / Object<span>null</span></div>
+        <div class="def-cell">Con {}<span>tus valores</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Acceso y propiedades clave</div>
+      <pre><span class="kw">int</span> x   = arr[<span class="num">2</span>];            <span class="cm">// leer posición 2</span>
+<span class="kw">int</span> ult = arr[arr.length-<span class="num">1</span>];  <span class="cm">// último elemento</span>
+arr[<span class="num">0</span>]  = <span class="num">99</span>;                <span class="cm">// escribir</span>
+<span class="kw">int</span> n   = arr.length;         <span class="cm">// tamaño — SIN paréntesis</span></pre>
+      <div class="warn">⚠ <code>arr.length</code> es una propiedad, NO un método. Sin ().</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Paso por referencia — importante</div>
+      <pre><span class="cm">// Los arrays se pasan por REFERENCIA</span>
+<span class="cm">// Los cambios dentro de la función SÍ afectan al original</span>
+<span class="kw">public static void</span> doblar(<span class="kw">int</span>[] t) {
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;t.length; i++) t[i] *= <span class="num">2</span>;
+}
+<span class="kw">int</span>[] arr = {<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>};
+doblar(arr);  <span class="cm">// arr ahora es {2, 4, 6}</span></pre>
+      <div class="warn">⚠ Los tipos primitivos (int, double…) NO se modifican fuera. Los arrays SÍ.</div>
+    </div>
+  </div>
+
+  <!-- A2 RECORRER -->
+  <div id="a2" class="inner-section">
+    <div class="card">
+      <div class="card-title">For clásico — el más versátil</div>
+      <span class="badge bp">Con índice — permite leer y modificar</span>
+      <pre><span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; arr.length; i++) {
+    System.out.println(arr[i]);
+}
+
+<span class="cm">// Al revés</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = arr.length-<span class="num">1</span>; i &gt;= <span class="num">0</span>; i--) {
+    System.out.println(arr[i]);
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">For-each — más limpio, solo lectura</div>
+      <span class="badge bt">Sin índice — no sirve para modificar</span>
+      <pre><span class="kw">for</span> (<span class="kw">int</span> valor : arr) {
+    System.out.println(valor);
+}
+<span class="cm">// Para char[]:</span>
+<span class="kw">for</span> (<span class="kw">char</span> c : charArr) { ... }</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">While con filtro — cuando hay condición de entrada</div>
+      <span class="badge ba">pos solo avanza si el dato pasa el filtro</span>
+      <pre><span class="kw">int</span> pos = <span class="num">0</span>, descartados = <span class="num">0</span>;
+<span class="kw">while</span> (pos &lt; tabla.length) {
+    <span class="kw">int</span> num = sc.nextInt();
+    <span class="kw">if</span> (num % <span class="num">2</span> == <span class="num">0</span>) {   <span class="cm">// solo guarda pares</span>
+        tabla[pos] = num;
+        pos++;
+    } <span class="kw">else</span> {
+        descartados++;
+    }
+}
+<span class="cm">// Úsalo cuando no sabes cuántas entradas habrá</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Acumuladores en un solo bucle</div>
+      <pre><span class="kw">int</span> suma = <span class="num">0</span>, max = arr[<span class="num">0</span>], min = arr[<span class="num">0</span>];
+<span class="kw">int</span> pos=<span class="num">0</span>, neg=<span class="num">0</span>, cero=<span class="num">0</span>;
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; arr.length; i++) {
+    suma += arr[i];
+    <span class="kw">if</span> (arr[i] &gt; max) max = arr[i];
+    <span class="kw">if</span> (arr[i] &lt; min) min = arr[i];
+    <span class="kw">if</span>      (arr[i] &gt; <span class="num">0</span>) pos++;
+    <span class="kw">else if</span> (arr[i] &lt; <span class="num">0</span>) neg++;
+    <span class="kw">else</span>                  cero++;
+}
+<span class="kw">double</span> media = (<span class="kw">double</span>) suma / arr.length;  <span class="cm">// cast obligatorio</span></pre>
+      <div class="tip">Inicializa <code>max</code> y <code>min</code> con <code>arr[0]</code>, nunca con 0 (falla con todos negativos).</div>
+    </div>
+  </div>
+
+  <!-- A3 MÉTODOS -->
+  <div id="a3" class="inner-section">
+    <div class="card">
+      <div class="card-title">import java.util.Arrays — referencia completa</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">Arrays.toString(arr)</span><span class="mref-desc">Imprime como texto: [2, 4, 6, 8] — para depurar</span></div>
+        <div class="mref-row"><span class="mref-name">Arrays.sort(arr)</span><span class="mref-desc">Ordena de menor a mayor. Modifica el original</span></div>
+        <div class="mref-row"><span class="mref-name">Arrays.sort(arr, 0, n)</span><span class="mref-desc">Ordena solo los primeros n elementos (índices 0..n-1)</span></div>
+        <div class="mref-row"><span class="mref-name">Arrays.fill(arr, val)</span><span class="mref-desc">Rellena todo con el mismo valor</span></div>
+        <div class="mref-row"><span class="mref-name">Arrays.copyOf(arr, n)</span><span class="mref-desc">Copia nueva de tamaño n (rellena con 0 si n > arr.length)</span></div>
+        <div class="mref-row"><span class="mref-name">Arrays.equals(a1, a2)</span><span class="mref-desc">Compara contenido elemento a elemento → boolean</span></div>
+        <div class="mref-row"><span class="mref-name">Arrays.binarySearch(arr,v)</span><span class="mref-desc">Busca v. Requiere que el array esté ordenado antes</span></div>
+      </div>
+      <pre style="margin-top:12px"><span class="kw">import</span> java.util.Arrays;
+
+<span class="kw">int</span>[] n = {<span class="num">3</span>,<span class="num">1</span>,<span class="num">4</span>,<span class="num">1</span>,<span class="num">5</span>};
+Arrays.sort(n);
+System.out.println(Arrays.toString(n));    <span class="cm">// [1, 1, 3, 4, 5]</span>
+System.out.println(Arrays.equals(n, n));   <span class="cm">// true</span>
+
+<span class="cm">// Ordenar solo los primeros 5 de un array más grande</span>
+Arrays.sort(puntuaciones, <span class="num">0</span>, <span class="num">5</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Convertir String ↔ char[]</div>
+      <pre><span class="cm">// String → char[]</span>
+<span class="kw">char</span>[] chars = palabra.<span class="fn">toCharArray</span>();
+
+<span class="cm">// char[] → String</span>
+String s = <span class="kw">new</span> String(chars);
+
+<span class="cm">// Útil para anagramas: ordenar las letras y comparar</span>
+<span class="kw">char</span>[] p1 = palabra1.<span class="fn">toLowerCase</span>().<span class="fn">toCharArray</span>();
+<span class="kw">char</span>[] p2 = palabra2.<span class="fn">toLowerCase</span>().<span class="fn">toCharArray</span>();
+Arrays.<span class="fn">sort</span>(p1);
+Arrays.<span class="fn">sort</span>(p2);
+<span class="kw">boolean</span> esAnagrama = Arrays.<span class="fn">equals</span>(p1, p2);</pre>
+    </div>
+  </div>
+
+  <!-- A4 FUNCIONES -->
+  <div id="a4" class="inner-section">
+    <div class="card">
+      <div class="card-title">Estructura de una función con array</div>
+      <div class="grid2">
+        <div>
+          <span class="badge bp">Recibe array, devuelve valor</span>
+          <pre><span class="kw">public static int</span> suma(<span class="kw">int</span>[] t) {
+    <span class="kw">int</span> s = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;t.length; i++)
+        s += t[i];
+    <span class="kw">return</span> s;
+}</pre>
+        </div>
+        <div>
+          <span class="badge bt">Devuelve un array</span>
+          <pre><span class="kw">public static int</span>[] copiar(<span class="kw">int</span>[] t) {
+    <span class="kw">int</span>[] r = <span class="kw">new int</span>[t.length];
+    <span class="kw">for</span>(<span class="kw">int</span> i=<span class="num">0</span>;i&lt;t.length;i++)
+        r[i]=t[i];
+    <span class="kw">return</span> r;
+}</pre>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Sobrecarga — mismo nombre, distintos parámetros</div>
+      <span class="badge bp">Java elige la versión según lo que le pases</span>
+      <pre><span class="kw">public static int</span> maximo(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> (a &gt; b) ? a : b;
+}
+<span class="kw">public static int</span> maximo(<span class="kw">int</span> a, <span class="kw">int</span> b, <span class="kw">int</span> c) {
+    <span class="kw">return</span> maximo(maximo(a, b), c);  <span class="cm">// reutiliza la anterior</span>
+}
+<span class="kw">public static int</span> maximo(<span class="kw">int</span>[] tabla) {
+    <span class="kw">int</span> max = tabla[<span class="num">0</span>];             <span class="cm">// iniciar con [0], no con 0</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">1</span>; i&lt;tabla.length; i++)
+        <span class="kw">if</span> (tabla[i] &gt; max) max = tabla[i];
+    <span class="kw">return</span> max;
+}</pre>
+      <ul class="dots">
+        <li>Mismo nombre → distintos tipos o cantidad de parámetros</li>
+        <li>Se puede llamar a una versión desde otra para reutilizar código</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Flag booleano — comparar / buscar</div>
+      <pre><span class="kw">public static boolean</span> iguales(<span class="kw">int</span>[] t1, <span class="kw">int</span>[] t2) {
+    <span class="kw">boolean</span> res = <span class="kw">true</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;t1.length; i++)
+        <span class="kw">if</span> (t1[i] != t2[i]) res = <span class="kw">false</span>;
+    <span class="kw">return</span> res;
+}
+<span class="cm">// O con Arrays.equals(t1, t2)</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Doble bucle — coincidencias entre dos arrays</div>
+      <span class="badge ba">Ej: aciertos primitiva, buscar duplicados entre tablas</span>
+      <pre><span class="kw">public static int</span> aciertos(<span class="kw">int</span>[] apuesta, <span class="kw">int</span>[] ganadora) {
+    <span class="kw">int</span> cont = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;apuesta.length; i++)
+        <span class="kw">for</span> (<span class="kw">int</span> j=<span class="num">0</span>; j&lt;ganadora.length; j++)
+            <span class="kw">if</span> (apuesta[i] == ganadora[j]) cont++;
+    <span class="kw">return</span> cont;
+}</pre>
+      <div class="tip">Por cada elemento del primero, recorre todo el segundo buscando coincidencia.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Copiar con longitud variable</div>
+      <pre><span class="kw">public static double</span>[] copiar(<span class="kw">double</span>[] original, <span class="kw">int</span> longitud) {
+    <span class="kw">double</span>[] nuevo = <span class="kw">new double</span>[longitud];
+    <span class="kw">int</span> min = longitud &lt; original.length ? longitud : original.length;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;min; i++) nuevo[i] = original[i];
+    <span class="kw">return</span> nuevo;
+}
+<span class="cm">// Si longitud > original.length → rellena el resto con 0.0</span>
+<span class="cm">// Si longitud < original.length → solo copia los primeros</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Invertir array (swap con auxiliar)</div>
+      <pre><span class="kw">public static void</span> invertir(<span class="kw">int</span> fin, <span class="kw">int</span>[] t) {
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;fin; i++) {
+        <span class="kw">int</span> aux = t[i];
+        t[i] = t[fin-<span class="num">1</span>];
+        t[fin-<span class="num">1</span>] = aux;
+        fin--;
+    }
+}
+<span class="cm">// Patrón swap: siempre necesitas una variable auxiliar</span>
+<span class="cm">// int aux = a; a = b; b = aux;</span></pre>
+    </div>
+  </div>
+
+  <!-- A5 2D -->
+  <div id="a5" class="inner-section">
+    <div class="card">
+      <div class="card-title">Declarar y recorrer</div>
+      <pre><span class="kw">int</span>[][] m = <span class="kw">new int</span>[<span class="num">4</span>][<span class="num">3</span>];   <span class="cm">// 4 filas, 3 columnas</span>
+<span class="kw">int</span>[][] m = {{<span class="num">1</span>,<span class="num">2</span>},{<span class="num">3</span>,<span class="num">4</span>},{<span class="num">5</span>,<span class="num">6</span>}};
+
+<span class="kw">for</span> (<span class="kw">int</span> fila=<span class="num">0</span>; fila&lt;m.length; fila++) {
+    <span class="kw">for</span> (<span class="kw">int</span> col=<span class="num">0</span>; col&lt;m[fila].length; col++) {
+        System.out.print(m[fila][col] + <span class="str">" "</span>);
+    }
+    System.out.println();
+}
+
+<span class="cm">// m.length        → nº de filas</span>
+<span class="cm">// m[fila].length  → nº de columnas</span>
+<span class="cm">// m[fila][col]    → elemento</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Suma de fila y columna</div>
+      <div class="grid2">
+        <div>
+          <pre><span class="kw">public static int</span> sumarFila(
+        <span class="kw">int</span>[][] t, <span class="kw">int</span> fila) {
+    <span class="kw">int</span> s = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> c=<span class="num">0</span>; c&lt;t[fila].length; c++)
+        s += t[fila][c];
+    <span class="kw">return</span> s;
+}</pre>
+        </div>
+        <div>
+          <pre><span class="kw">public static int</span> sumarCol(
+        <span class="kw">int</span>[][] t, <span class="kw">int</span> col) {
+    <span class="kw">int</span> s = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> f=<span class="num">0</span>; f&lt;t.length; f++)
+        s += t[f][col];
+    <span class="kw">return</span> s;
+}</pre>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Tabla mágica — todas las filas suman igual</div>
+      <pre><span class="kw">public static boolean</span> esMagica(<span class="kw">int</span>[][] t) {
+    <span class="kw">int</span> ref = sumarFila(t, <span class="num">0</span>);  <span class="cm">// primera fila como referencia</span>
+    <span class="kw">for</span> (<span class="kw">int</span> f=<span class="num">1</span>; f&lt;t.length; f++)
+        <span class="kw">if</span> (sumarFila(t, f) != ref) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- A6 PATRONES -->
+  <div id="a6" class="inner-section">
+    <div class="card">
+      <div class="card-title">Eliminar elemento por índice</div>
+      <pre><span class="cm">// Desplazar izquierda desde el índice a borrar</span>
+<span class="kw">for</span> (<span class="kw">int</span> pos=indice; pos&lt;longitud-<span class="num">1</span>; pos++)
+    tabla[pos] = tabla[pos+<span class="num">1</span>];
+longitud--;  <span class="cm">// reducir tamaño lógico (no el array físico)</span></pre>
+      <div class="tip">Usa una variable <code>longitud</code> separada de <code>tabla.length</code>.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Fusionar dos arrays ordenados</div>
+      <pre><span class="kw">int</span>[] res = <span class="kw">new int</span>[t1.length + t2.length];
+<span class="kw">int</span> i1=<span class="num">0</span>, i2=<span class="num">0</span>, ir=<span class="num">0</span>;
+<span class="kw">while</span> (ir &lt; res.length) {
+    <span class="kw">if</span> (i1 &gt;= t1.length ||
+       (i2 &lt; t2.length && t2[i2] &lt;= t1[i1]))
+        res[ir] = t2[i2++];
+    <span class="kw">else</span>
+        res[ir] = t1[i1++];
+    ir++;
+}
+<span class="cm">// Primero Arrays.sort() cada tabla, luego fusiona</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Eliminar duplicados (sin Set)</div>
+      <pre><span class="kw">public static int</span>[] sinRepetidos(<span class="kw">int</span>[] t) {
+    <span class="kw">int</span>[] res = {t[<span class="num">0</span>]};
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">1</span>; i&lt;t.length; i++) {
+        <span class="kw">boolean</span> existe = <span class="kw">false</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j=<span class="num">0</span>; j&lt;res.length; j++)
+            <span class="kw">if</span> (t[i]==res[j]) existe=<span class="kw">true</span>;
+        <span class="kw">if</span> (!existe) res = insertar(res, t[i]);
+    }
+    <span class="kw">return</span> res;
+}
+<span class="kw">public static int</span>[] insertar(<span class="kw">int</span>[] tab, <span class="kw">int</span> val) {
+    <span class="kw">int</span>[] nuevo = <span class="kw">new int</span>[tab.length+<span class="num">1</span>];
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;tab.length; i++) nuevo[i]=tab[i];
+    nuevo[tab.length] = val;
+    <span class="kw">return</span> nuevo;
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Números aleatorios</div>
+      <pre><span class="cm">// Del 1 al N</span>
+(<span class="kw">int</span>)(Math.random() * N) + <span class="num">1</span>
+
+<span class="cm">// Del 0 al N-1</span>
+(<span class="kw">int</span>)(Math.random() * N)
+
+<span class="cm">// Con Random (más flexible)</span>
+Random rand = <span class="kw">new</span> Random();
+<span class="kw">int</span> j = rand.nextInt(i + <span class="num">1</span>);  <span class="cm">// 0..i inclusive</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Shuffle — mezclar array (algoritmo Fisher-Yates)</div>
+      <pre><span class="cm">// Recorre de atrás hacia adelante e intercambia con posición aleatoria</span>
+Random rand = <span class="kw">new</span> Random();
+<span class="kw">for</span> (<span class="kw">int</span> i = chars.length-<span class="num">1</span>; i &gt; <span class="num">0</span>; i--) {
+    <span class="kw">int</span> j = rand.nextInt(i + <span class="num">1</span>);
+    <span class="kw">char</span> temp = chars[i];
+    chars[i]  = chars[j];
+    chars[j]  = temp;         <span class="cm">// swap</span>
+}
+<span class="cm">// Válido para cualquier tipo: int[], char[], etc.</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Codificación por tabla de sustitución</div>
+      <pre><span class="cm">// Busca el char en conjunto1 y devuelve el equivalente de conjunto2</span>
+<span class="kw">public static char</span> codifica(<span class="kw">char</span>[] c1, <span class="kw">char</span>[] c2, <span class="kw">char</span> c) {
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;c1.length; i++)
+        <span class="kw">if</span> (c == c1[i]) <span class="kw">return</span> c2[i];
+    <span class="kw">return</span> c;  <span class="cm">// si no está, devuelve el mismo carácter</span>
+}
+<span class="cm">// Para decodificar: buscar en c2 y devolver de c1 (mismo patrón)</span>
+<span class="kw">public static char</span> decodifica(<span class="kw">char</span>[] c1, <span class="kw">char</span>[] c2, <span class="kw">char</span> c) {
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;c2.length; i++)
+        <span class="kw">if</span> (c == c2[i]) <span class="kw">return</span> c1[i];
+    <span class="kw">return</span> c;
+}</pre>
+    </div>
+  </div>
+
+  <!-- A7 ERRORES -->
+  <div id="a7" class="inner-section">
+    <div class="card">
+      <div class="card-title">ArrayIndexOutOfBoundsException</div>
+      <pre><span class="cm">// Índices válidos: 0 hasta length-1</span>
+arr[arr.length] = <span class="num">5</span>;             <span class="cm">// ERROR</span>
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i &lt;= arr.length; i++) <span class="cm">// ERROR: debe ser &lt;</span></pre>
+      <div class="err">Índice máximo válido: <code>arr.length - 1</code></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Comparar arrays con ==</div>
+      <pre>arr1 == arr2              <span class="cm">// compara referencias, casi siempre false</span>
+Arrays.equals(arr1, arr2) <span class="cm">// compara contenido — CORRECTO</span></pre>
+      <div class="err">== en arrays NO compara valores. Usa <code>Arrays.equals()</code>.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">length vs length() vs size()</div>
+      <pre>arr.length        <span class="cm">// array      → propiedad, sin ()</span>
+str.length()      <span class="cm">// String     → método, con ()</span>
+lista.size()      <span class="cm">// ArrayList  → método, con ()</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">División entera — cast a double</div>
+      <pre><span class="kw">double</span> media = suma / arr.length;            <span class="cm">// INCORRECTO (trunca)</span>
+<span class="kw">double</span> media = (<span class="kw">double</span>) suma / arr.length;   <span class="cm">// CORRECTO</span></pre>
+      <div class="err">Si ambos operandos son int, Java hace división entera y descarta decimales.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Inicializar max/min con 0</div>
+      <pre><span class="kw">int</span> max = <span class="num">0</span>;         <span class="cm">// falla si todos son negativos</span>
+<span class="kw">int</span> max = arr[<span class="num">0</span>];    <span class="cm">// CORRECTO — siempre con el primer elemento</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">NullPointerException en arrays de objetos</div>
+      <pre><span class="kw">String</span>[] s = <span class="kw">new String</span>[<span class="num">3</span>];
+s[<span class="num">0</span>].length();   <span class="cm">// ERROR — s[0] es null todavía</span>
+s[<span class="num">0</span>] = <span class="str">"hola"</span>;
+s[<span class="num">0</span>].length();   <span class="cm">// OK</span></pre>
+      <div class="err">Arrays de objetos (String, etc.) se inicializan a <code>null</code>, no a valor vacío.</div>
+    </div>
+  </div>
+</div><!-- /arrays -->
+
+
+<!-- ══════════════════════════════════════════════
+     TOPIC: CADENAS
+══════════════════════════════════════════════ -->
+<div id="cadenas" class="topic-section">
+  <div class="inner-nav">
+    <button class="inner-btn on" onclick="showInner('cadenas','c1',this)">Métodos clave</button>
+    <button class="inner-btn"   onclick="showInner('cadenas','c2',this)">Recorrer / char</button>
+    <button class="inner-btn"   onclick="showInner('cadenas','c3',this)">Comparar</button>
+    <button class="inner-btn"   onclick="showInner('cadenas','c4',this)">Construir strings</button>
+    <button class="inner-btn"   onclick="showInner('cadenas','c5',this)">Patrones</button>
+    <button class="inner-btn"   onclick="showInner('cadenas','c6',this)">Errores comunes</button>
+  </div>
+
+  <!-- C1 MÉTODOS -->
+  <div id="c1" class="inner-section on">
+    <div class="card">
+      <div class="card-title">Referencia completa de métodos String</div>
+      <table class="stbl">
+        <thead><tr><th>Método</th><th>Descripción</th><th>Ejemplo / resultado</th></tr></thead>
+        <tbody>
+          <tr><td>s.length()</td><td>Longitud de la cadena</td><td>"hola".length() → 4</td></tr>
+          <tr><td>s.charAt(i)</td><td>Char en posición i</td><td>"hola".charAt(1) → 'o'</td></tr>
+          <tr><td>s.indexOf("x")</td><td>Primera posición de x (-1 si no está)</td><td>"hola".indexOf("l") → 2</td></tr>
+          <tr><td>s.lastIndexOf("x")</td><td>Última posición de x</td><td>"abab".lastIndexOf("a") → 2</td></tr>
+          <tr><td>s.substring(i)</td><td>Desde i hasta el final</td><td>"hola".substring(2) → "la"</td></tr>
+          <tr><td>s.substring(i,j)</td><td>Desde i hasta j (sin incluir j)</td><td>"hola".substring(1,3) → "ol"</td></tr>
+          <tr><td>s.toLowerCase()</td><td>Todo en minúsculas</td><td>"HOLA".toLowerCase() → "hola"</td></tr>
+          <tr><td>s.toUpperCase()</td><td>Todo en mayúsculas</td><td>"hola".toUpperCase() → "HOLA"</td></tr>
+          <tr><td>s.trim()</td><td>Elimina espacios al inicio y al final</td><td>"  hi  ".trim() → "hi"</td></tr>
+          <tr><td>s.strip()</td><td>Como trim() pero con Unicode</td><td>versión moderna de trim()</td></tr>
+          <tr><td>s.stripLeading()</td><td>Elimina espacios solo al inicio</td><td>"  hi  " → "hi  "</td></tr>
+          <tr><td>s.stripTrailing()</td><td>Elimina espacios solo al final</td><td>"  hi  " → "  hi"</td></tr>
+          <tr><td>s.replace("a","b")</td><td>Reemplaza todas las ocurrencias</td><td>"banana".replace("a","o") → "bonono"</td></tr>
+          <tr><td>s.contains("x")</td><td>¿Contiene la subcadena x?</td><td>"hola".contains("ol") → true</td></tr>
+          <tr><td>s.startsWith("x")</td><td>¿Empieza por x?</td><td>"hola".startsWith("ho") → true</td></tr>
+          <tr><td>s.endsWith("x")</td><td>¿Termina en x?</td><td>"hola".endsWith("la") → true</td></tr>
+          <tr><td>s.isEmpty()</td><td>¿Longitud == 0?</td><td>"".isEmpty() → true</td></tr>
+          <tr><td>s.isBlank()</td><td>¿Solo espacios o vacía?</td><td>"  ".isBlank() → true</td></tr>
+          <tr><td>s.equals("x")</td><td>Compara contenido (case-sensitive)</td><td>"Hola".equals("hola") → false</td></tr>
+          <tr><td>s.equalsIgnoreCase("x")</td><td>Compara ignorando mayúsculas</td><td>"Hola".equalsIgnoreCase("hola") → true</td></tr>
+          <tr><td>s.compareTo("x")</td><td>Orden alfabético: negativo, 0 o positivo</td><td>"abc".compareTo("abd") → -1</td></tr>
+          <tr><td>s.toCharArray()</td><td>Convierte a char[]</td><td>"hi".toCharArray() → {'h','i'}</td></tr>
+          <tr><td>s.split(" ")</td><td>Divide por el patrón → String[]</td><td>"a b c".split(" ") → ["a","b","c"]</td></tr>
+          <tr><td>s.concat("x")</td><td>Concatena (igual que + )</td><td>"ho".concat("la") → "hola"</td></tr>
+          <tr><td>String.valueOf(n)</td><td>Convierte número a String</td><td>String.valueOf(42) → "42"</td></tr>
+          <tr><td>Integer.parseInt(s)</td><td>String → int</td><td>Integer.parseInt("42") → 42</td></tr>
+          <tr><td>Double.parseDouble(s)</td><td>String → double</td><td>Double.parseDouble("3.14") → 3.14</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- C2 RECORRER / CHAR -->
+  <div id="c2" class="inner-section">
+    <div class="card">
+      <div class="card-title">Recorrer un String carácter a carácter</div>
+      <pre><span class="cm">// Con for clásico — el más usado</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; frase.length(); i++) {
+    <span class="kw">char</span> c = frase.charAt(i);
+    <span class="cm">// operar con c</span>
+}
+
+<span class="cm">// Con toCharArray() + for-each</span>
+<span class="kw">for</span> (<span class="kw">char</span> c : frase.toCharArray()) {
+    <span class="cm">// operar con c</span>
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Trabajar con char — comparaciones y conversiones</div>
+      <pre><span class="cm">// Comparar char con char literal</span>
+<span class="kw">if</span> (c == <span class="str">'a'</span>) ...
+<span class="kw">if</span> (c == <span class="str">' '</span>) ...    <span class="cm">// espacio en blanco</span>
+
+<span class="cm">// Métodos de Character</span>
+Character.isLetter(c)       <span class="cm">// ¿es letra?</span>
+Character.isDigit(c)        <span class="cm">// ¿es dígito?</span>
+Character.isWhitespace(c)   <span class="cm">// ¿es espacio/tab/enter?</span>
+Character.isUpperCase(c)    <span class="cm">// ¿mayúscula?</span>
+Character.toLowerCase(c)    <span class="cm">// convierte a minúscula</span>
+Character.toUpperCase(c)    <span class="cm">// convierte a mayúscula</span>
+
+<span class="cm">// Char es un número → se puede comparar con &lt; &gt;</span>
+<span class="cm">// 'a'=97, 'z'=122, 'A'=65, '0'=48</span>
+<span class="kw">if</span> (c &gt;= <span class="str">'a'</span> && c &lt;= <span class="str">'z'</span>) ... <span class="cm">// letra minúscula</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Contar ocurrencias de una letra</div>
+      <pre><span class="kw">public static void</span> repetidos(<span class="kw">char</span> letra, String frase) {
+    <span class="kw">int</span> cont = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;frase.length(); i++)
+        <span class="kw">if</span> (frase.charAt(i) == letra) cont++;
+    <span class="kw">if</span> (cont &gt;= <span class="num">1</span>)
+        System.out.println(letra + <span class="str">": "</span> + cont
+            + (cont==<span class="num">1</span> ? <span class="str">" vez"</span> : <span class="str">" veces"</span>));
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Filtrar caracteres (eliminar vocales / espacios)</div>
+      <pre><span class="kw">String</span> resultado = <span class="str">""</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;s.length(); i++) {
+    <span class="kw">char</span> c = s.charAt(i);
+    <span class="kw">boolean</span> esVocal = <span class="kw">false</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> v=<span class="num">0</span>; v&lt;vocales.length; v++)
+        <span class="kw">if</span> (c == vocales[v]) esVocal = <span class="kw">true</span>;
+    <span class="kw">if</span> (!esVocal) resultado += c;
+}
+<span class="cm">// Patrón: doble bucle char array + flag booleano</span></pre>
+    </div>
+  </div>
+
+  <!-- C3 COMPARAR -->
+  <div id="c3" class="inner-section">
+    <div class="card">
+      <div class="card-title">La regla de oro — nunca == para comparar Strings</div>
+      <pre><span class="cm">// INCORRECTO — compara referencias (dirección en memoria)</span>
+<span class="kw">if</span> (s1 == s2) ...
+
+<span class="cm">// CORRECTO — compara contenido</span>
+<span class="kw">if</span> (s1.equals(s2)) ...
+
+<span class="cm">// Ignorando mayúsculas/minúsculas</span>
+<span class="kw">if</span> (s1.equalsIgnoreCase(s2)) ...
+
+<span class="cm">// Para comparar con literal, pon el literal primero (evita NPE)</span>
+<span class="kw">if</span> (<span class="str">"fin"</span>.equalsIgnoreCase(palabra)) ...
+<span class="cm">// Si palabra fuera null, así no peta</span></pre>
+      <div class="err">== con Strings casi siempre da false aunque tengan el mismo contenido.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">compareTo — orden alfabético</div>
+      <pre><span class="kw">int</span> r = s1.compareTo(s2);
+<span class="cm">// r < 0  → s1 va antes que s2 alfabéticamente</span>
+<span class="cm">// r = 0  → son iguales</span>
+<span class="cm">// r > 0  → s1 va después que s2</span>
+
+<span class="cm">// Ejemplo práctico — pista en juego de adivinar contraseña</span>
+<span class="kw">int</span> diff = intento.compareTo(secreto);
+<span class="kw">if</span>      (diff &lt; <span class="num">0</span>) System.out.println(<span class="str">"Tu palabra va antes"</span>);
+<span class="kw">else if</span> (diff &gt; <span class="num">0</span>) System.out.println(<span class="str">"Tu palabra va después"</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">startsWith / endsWith / contains</div>
+      <pre>frase.startsWith(<span class="str">"Javalin, javalon"</span>)  <span class="cm">// ¿empieza por?</span>
+frase.endsWith(<span class="str">"len, len"</span>)           <span class="cm">// ¿termina por?</span>
+frase.contains(<span class="str">"java"</span>)              <span class="cm">// ¿contiene?</span>
+
+<span class="cm">// Extraer el resto tras el prefijo</span>
+String resto = frase.substring(prefijo.length());
+resto = resto.stripLeading();  <span class="cm">// quitar espacios iniciales</span></pre>
+    </div>
+  </div>
+
+  <!-- C4 CONSTRUIR -->
+  <div id="c4" class="inner-section">
+    <div class="card">
+      <div class="card-title">Concatenar en bucle</div>
+      <pre><span class="cm">// Patrón básico: acumular en una variable</span>
+String resultado = <span class="str">""</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;s.length(); i++) {
+    resultado += s.charAt(i);    <span class="cm">// añadir char a char</span>
+}
+
+<span class="cm">// Con char[] → String al final</span>
+<span class="kw">char</span>[] chars = s.toCharArray();
+<span class="cm">// ... modificar chars ...</span>
+String nuevo = <span class="kw">new</span> String(chars);</pre>
+      <div class="warn">Concatenar con + en bucles largos es lento. Para muchas operaciones usa <code>StringBuilder</code>.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">split — dividir un String</div>
+      <pre><span class="cm">// Dividir por espacios → array de palabras</span>
+String[] palabras = frase.split(<span class="str">" "</span>);
+
+<span class="cm">// Recorrer con for-each</span>
+<span class="kw">for</span> (String p : palabras) {
+    System.out.println(p);
+}
+
+<span class="cm">// Buscar una palabra concreta</span>
+<span class="kw">int</span> cont = <span class="num">0</span>;
+<span class="kw">for</span> (String p : palabras)
+    <span class="kw">if</span> (p.equals(objetivo)) cont++;
+
+<span class="cm">// Eliminar espacios y unir todo</span>
+String sinEsp = <span class="str">""</span>;
+<span class="kw">for</span> (String p : palabras) sinEsp += p.toLowerCase();</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Leer Strings por teclado</div>
+      <pre><span class="cm">// nextLine() → lee toda la línea con espacios</span>
+String frase = sc.nextLine();
+
+<span class="cm">// next() → solo lee hasta el primer espacio</span>
+String palabra = sc.next();
+
+<span class="cm">// TRAMPA: si usas nextInt() antes de nextLine()</span>
+<span class="cm">// el intro queda en el buffer y nextLine() lee ""</span>
+<span class="kw">int</span> n = sc.nextInt();
+sc.nextLine();           <span class="cm">// ← consumir el intro sobrante</span>
+String s = sc.nextLine();</pre>
+      <div class="err">Mezclar <code>nextInt()</code>/<code>nextDouble()</code> con <code>nextLine()</code> → añade un <code>sc.nextLine()</code> extra entre ellos.</div>
+    </div>
+  </div>
+
+  <!-- C5 PATRONES -->
+  <div id="c5" class="inner-section">
+    <div class="card">
+      <div class="card-title">Anagrama — verificar si dos palabras son anagramas</div>
+      <pre><span class="kw">public static void</span> anagrama(String p1, String p2) {
+    <span class="kw">char</span>[] c1 = p1.toLowerCase().toCharArray();
+    <span class="kw">char</span>[] c2 = p2.toLowerCase().toCharArray();
+    Arrays.sort(c1);
+    Arrays.sort(c2);
+    <span class="kw">if</span> (Arrays.equals(c1, c2))
+        System.out.println(<span class="str">"Son anagramas"</span>);
+    <span class="kw">else</span>
+        System.out.println(<span class="str">"No son anagramas"</span>);
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Palíndromo — una frase leída igual al revés</div>
+      <pre><span class="cm">// 1. Quitar espacios y poner en minúsculas</span>
+String[] partes = frase.split(<span class="str">" "</span>);
+String limpia = <span class="str">""</span>;
+<span class="kw">for</span> (String p : partes) limpia += p.toLowerCase();
+
+<span class="cm">// 2. Invertir</span>
+<span class="kw">char</span>[] chars = limpia.toCharArray();
+<span class="kw">int</span> ini=<span class="num">0</span>, fin=chars.length-<span class="num">1</span>;
+<span class="kw">while</span> (ini &lt; fin) {
+    <span class="kw">char</span> tmp = chars[ini]; chars[ini]=chars[fin]; chars[fin]=tmp;
+    ini++; fin--;
+}
+String invertida = <span class="kw">new</span> String(chars);
+
+<span class="cm">// 3. Comparar</span>
+<span class="kw">if</span> (limpia.equals(invertida))
+    System.out.println(<span class="str">"Es palíndromo"</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Anagrama aleatorio (juego)</div>
+      <pre><span class="cm">// Mezclar los chars de una String aleatoriamente</span>
+<span class="kw">char</span>[] chars = frase.toCharArray();
+Random rand = <span class="kw">new</span> Random();
+<span class="kw">for</span> (<span class="kw">int</span> i=chars.length-<span class="num">1</span>; i&gt;<span class="num">0</span>; i--) {
+    <span class="kw">int</span> j = rand.nextInt(i+<span class="num">1</span>);
+    <span class="kw">char</span> tmp=chars[i]; chars[i]=chars[j]; chars[j]=tmp;
+}
+String mezclada = <span class="kw">new</span> String(chars);</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Codificador / decodificador por sustitución</div>
+      <pre><span class="cm">// Codificar: buscar en conjunto1, devolver equivalente de conjunto2</span>
+<span class="kw">String</span> codificada = <span class="str">""</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;cadena.length(); i++)
+    codificada += codifica(c1, c2, cadena.toLowerCase().charAt(i));
+
+<span class="kw">public static char</span> codifica(<span class="kw">char</span>[] c1, <span class="kw">char</span>[] c2, <span class="kw">char</span> c) {
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;c1.length; i++)
+        <span class="kw">if</span> (c==c1[i]) <span class="kw">return</span> c2[i];
+    <span class="kw">return</span> c;  <span class="cm">// si no está en la tabla, no cambia</span>
+}
+<span class="cm">// Decodificar: mismo patrón pero buscar en c2 y devolver de c1</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Acumular palabras hasta "fin"</div>
+      <pre><span class="kw">String</span> cadena = sc.next();  <span class="cm">// primera palabra</span>
+<span class="kw">while</span> (!<span class="str">"fin"</span>.equalsIgnoreCase(cadena)) {
+    String siguiente = sc.next();
+    <span class="kw">if</span> (!<span class="str">"fin"</span>.equalsIgnoreCase(siguiente))
+        cadena += <span class="str">" "</span> + siguiente;
+    <span class="kw">else</span>
+        <span class="kw">break</span>;
+}
+System.out.println(cadena);</pre>
+      <div class="tip">Pon el literal primero al comparar: <code>"fin".equalsIgnoreCase(var)</code> nunca lanza NullPointerException aunque <code>var</code> sea null.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Extraer prefijo / sufijo y quedarse con el resto</div>
+      <pre><span class="cm">// Quitar prefijo conocido</span>
+String inicio = <span class="str">"Javalin, javalon"</span>;
+<span class="kw">if</span> (frase.startsWith(inicio)) {
+    String resto = frase.substring(inicio.length());
+    resto = resto.stripLeading();  <span class="cm">// quitar espacios</span>
+}
+
+<span class="cm">// Quitar sufijo conocido</span>
+String fin = <span class="str">"javalen, len, len"</span>;
+<span class="kw">if</span> (frase.endsWith(fin)) {
+    String resto = frase.substring(<span class="num">0</span>, frase.length()-fin.length());
+    resto = resto.stripTrailing();
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Contar espacios en blanco</div>
+      <pre><span class="kw">int</span> espacios = <span class="num">0</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;frase.length(); i++)
+    <span class="kw">if</span> (frase.charAt(i) == <span class="str">' '</span>) espacios++;
+
+<span class="cm">// Alternativa con split (cuenta palabras)</span>
+String[] palabras = frase.trim().split(<span class="str">"\\s+"</span>);
+<span class="kw">int</span> numPalabras = palabras.length;
+<span class="cm">// nº de espacios ≈ numPalabras - 1</span></pre>
+    </div>
+  </div>
+
+  <!-- C6 ERRORES -->
+  <div id="c6" class="inner-section">
+    <div class="card">
+      <div class="card-title">Comparar con == en lugar de equals()</div>
+      <pre>s1 == s2             <span class="cm">// compara referencias — INCORRECTO</span>
+s1.equals(s2)        <span class="cm">// compara contenido  — CORRECTO</span></pre>
+      <div class="err">El error más frecuente con Strings. Siempre <code>equals()</code>.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">StringIndexOutOfBoundsException</div>
+      <pre><span class="cm">// Índices válidos: 0 hasta length()-1</span>
+s.charAt(s.length())   <span class="cm">// ERROR</span>
+s.charAt(s.length()-<span class="num">1</span>) <span class="cm">// CORRECTO — último char</span>
+
+<span class="cm">// substring(i, j): j puede ser length() pero no más</span>
+s.substring(<span class="num">0</span>, s.length())   <span class="cm">// OK — toda la cadena</span>
+s.substring(<span class="num">0</span>, s.length()+<span class="num">1</span>) <span class="cm">// ERROR</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Mezclar nextInt() con nextLine()</div>
+      <pre><span class="kw">int</span> n = sc.nextInt();
+String s = sc.nextLine();  <span class="cm">// lee "" (el intro del nextInt)</span>
+
+<span class="cm">// SOLUCIÓN: consumir el intro sobrante</span>
+<span class="kw">int</span> n = sc.nextInt();
+sc.nextLine();             <span class="cm">// descarta el intro</span>
+String s = sc.nextLine();  <span class="cm">// ahora sí lee bien</span></pre>
+      <div class="err">Siempre añade <code>sc.nextLine()</code> de limpieza tras <code>nextInt()</code> o <code>nextDouble()</code> si después vas a leer Strings.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Inmutabilidad — los métodos no modifican el original</div>
+      <pre>String s = <span class="str">"  hola  "</span>;
+s.trim();                  <span class="cm">// no hace nada visible</span>
+System.out.println(s);     <span class="cm">// "  hola  " — sin cambios</span>
+
+<span class="cm">// CORRECTO: asignar el resultado</span>
+s = s.trim();
+System.out.println(s);     <span class="cm">// "hola"</span></pre>
+      <div class="err">Los Strings son inmutables. Todos los métodos devuelven una nueva String. Debes asignar el resultado.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">NullPointerException al llamar a método sobre null</div>
+      <pre>String s = <span class="kw">null</span>;
+s.length();      <span class="cm">// ERROR — s es null</span>
+
+<span class="cm">// Comprobar antes</span>
+<span class="kw">if</span> (s != <span class="kw">null</span> && s.length() &gt; <span class="num">0</span>) { ... }
+
+<span class="cm">// O poner el literal primero (safe)</span>
+<span class="str">"fin"</span>.equals(s)  <span class="cm">// no peta aunque s sea null</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">length vs length()</div>
+      <pre>arr.length        <span class="cm">// array  → propiedad sin ()</span>
+str.length()      <span class="cm">// String → método con ()</span>
+lista.size()      <span class="cm">// ArrayList → método con ()</span></pre>
+    </div>
+  </div>
+</div><!-- /cadenas -->
+
+
+<!-- ══════════════════════════════════════════════
+     TOPIC: CLASES / POO
+══════════════════════════════════════════════ -->
+<div id="clases" class="topic-section">
+  <div class="inner-nav">
+    <button class="inner-btn on" onclick="showInner('clases','oo1',this)">Estructura clase</button>
+    <button class="inner-btn"   onclick="showInner('clases','oo2',this)">Constructores</button>
+    <button class="inner-btn"   onclick="showInner('clases','oo3',this)">Encapsulación</button>
+    <button class="inner-btn"   onclick="showInner('clases','oo4',this)">Static / final</button>
+    <button class="inner-btn"   onclick="showInner('clases','oo5',this)">Herencia</button>
+    <button class="inner-btn"   onclick="showInner('clases','oo6',this)">Colecciones</button>
+    <button class="inner-btn"   onclick="showInner('clases','oo7',this)">Patrones</button>
+    <button class="inner-btn"   onclick="showInner('clases','oo8',this)">Errores comunes</button>
+  </div>
+
+  <!-- OO1 ESTRUCTURA -->
+  <div id="oo1" class="inner-section on">
+    <div class="card">
+      <div class="card-title">Anatomía de una clase</div>
+      <pre><span class="kw">public class</span> CuentaCorriente {
+
+    <span class="cm">// 1. Atributos (campos) — siempre private</span>
+    <span class="kw">private</span> String nombre;
+    <span class="kw">private double</span> saldo;
+
+    <span class="cm">// 2. Atributo de clase (compartido por todos los objetos)</span>
+    <span class="kw">public static</span> String banco;
+    <span class="kw">public static final</span> String moneda = <span class="str">"€"</span>;  <span class="cm">// constante</span>
+
+    <span class="cm">// 3. Constructor</span>
+    <span class="kw">public</span> CuentaCorriente(String nombre) {
+        <span class="kw">this</span>.nombre = nombre;
+        <span class="kw">this</span>.saldo = <span class="num">0</span>;
+    }
+
+    <span class="cm">// 4. Métodos de instancia</span>
+    <span class="kw">public void</span> ingresar(<span class="kw">double</span> cantidad) {
+        <span class="kw">if</span> (cantidad &gt; <span class="num">0</span>) saldo += cantidad;
+    }
+
+    <span class="cm">// 5. Getters y setters</span>
+    <span class="kw">public double</span> getSaldo()             { <span class="kw">return</span> saldo; }
+    <span class="kw">public void</span>   setNombre(String n)    { <span class="kw">this</span>.nombre = n; }
+
+    <span class="cm">// 6. toString — para imprimir el objeto directamente</span>
+    <span class="kw">@Override</span>
+    <span class="kw">public</span> String toString() {
+        <span class="kw">return</span> nombre + <span class="str">" | saldo: "</span> + saldo;
+    }
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Crear y usar objetos</div>
+      <pre><span class="cm">// new llama al constructor y reserva memoria</span>
+CuentaCorriente c1 = <span class="kw">new</span> CuentaCorriente(<span class="str">"Pepe"</span>);
+
+<span class="cm">// Llamar a métodos</span>
+c1.ingresar(<span class="num">200</span>);
+System.out.println(c1.getSaldo());  <span class="cm">// 200.0</span>
+
+<span class="cm">// toString se llama automáticamente al imprimir</span>
+System.out.println(c1);             <span class="cm">// Pepe | saldo: 200.0</span>
+
+<span class="cm">// Acceso a atributo estático (a través de la clase, no del objeto)</span>
+CuentaCorriente.banco = <span class="str">"BBVA"</span>;
+System.out.println(CuentaCorriente.banco);</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">La palabra clave this</div>
+      <pre><span class="cm">// this.campo → distingue atributo del parámetro con mismo nombre</span>
+<span class="kw">public</span> CuentaCorriente(String nombre) {
+    <span class="kw">this</span>.nombre = nombre;   <span class="cm">// this.nombre = atributo</span>
+}                           <span class="cm">// nombre      = parámetro
+
+// this(…) → llamar a otro constructor desde un constructor</span>
+<span class="kw">public</span> CuentaCorriente() {
+    <span class="kw">this</span>(<span class="str">"Anónimo"</span>);   <span class="cm">// llama al constructor de arriba</span>
+}                       <span class="cm">// debe ser la PRIMERA línea</span></pre>
+    </div>
+  </div>
+
+  <!-- OO2 CONSTRUCTORES -->
+  <div id="oo2" class="inner-section">
+    <div class="card">
+      <div class="card-title">Sobrecarga de constructores</div>
+      <span class="badge bp">Mismo nombre de clase, distintos parámetros</span>
+      <pre><span class="kw">public</span> CuentaCorriente(String nombre, String DNI) {
+    <span class="kw">this</span>.nombre = nombre;
+    <span class="kw">this</span>.DNI    = DNI;
+    <span class="kw">this</span>.saldo  = <span class="num">0</span>;
+    <span class="kw">this</span>.limiteDescubierto = <span class="num">-50</span>;
+}
+
+<span class="kw">public</span> CuentaCorriente(<span class="kw">double</span> saldo) {
+    <span class="kw">this</span>.nombre = <span class="str">"Anónimo"</span>;
+    <span class="kw">this</span>.saldo  = saldo;
+}
+
+<span class="cm">// Reutilizar constructor → this(…) SIEMPRE en la primera línea</span>
+<span class="kw">public</span> CuentaCorriente() {
+    <span class="kw">this</span>(<span class="str">"Anónimo"</span>, <span class="str">"00000000X"</span>);
+}</pre>
+      <div class="tip">Si no defines ningún constructor, Java crea uno vacío automáticamente. En cuanto defines uno, el vacío desaparece.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Orden de inicialización</div>
+      <pre><span class="cm">// Java inicializa en este orden:</span>
+<span class="cm">// 1. Atributos static (una vez al cargar la clase)</span>
+<span class="cm">// 2. Atributos de instancia (cada new)</span>
+<span class="cm">// 3. Cuerpo del constructor</span>
+
+<span class="cm">// Valores por defecto si no se asignan:</span>
+<span class="cm">// int/long → 0 · double/float → 0.0</span>
+<span class="cm">// boolean  → false · String/Object → null</span></pre>
+    </div>
+  </div>
+
+  <!-- OO3 ENCAPSULACIÓN -->
+  <div id="oo3" class="inner-section">
+    <div class="card">
+      <div class="card-title">Modificadores de acceso</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">private</span><span class="mref-desc">Solo accesible dentro de la misma clase. Usar para todos los atributos.</span></div>
+        <div class="mref-row"><span class="mref-name">public</span><span class="mref-desc">Accesible desde cualquier sitio. Usar para constructores y métodos públicos.</span></div>
+        <div class="mref-row"><span class="mref-name">protected</span><span class="mref-desc">Accesible dentro del paquete y desde subclases (herencia).</span></div>
+        <div class="mref-row"><span class="mref-name">(sin modificador)</span><span class="mref-desc">Package-private: accesible solo dentro del mismo paquete.</span></div>
+      </div>
+      <div class="tip">Regla práctica: atributos siempre <code>private</code>, acceso siempre a través de getters/setters.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Getters y setters</div>
+      <pre><span class="cm">// Getter — devuelve el valor del atributo</span>
+<span class="kw">public</span> String getNombre() {
+    <span class="kw">return</span> nombre;
+}
+
+<span class="cm">// Setter — modifica el valor (puede incluir validación)</span>
+<span class="kw">public void</span> setSaldo(<span class="kw">double</span> saldo) {
+    <span class="kw">if</span> (saldo &gt;= <span class="num">0</span>) <span class="kw">this</span>.saldo = saldo;
+}
+
+<span class="cm">// Getter boolean → convención: isXxx en vez de getXxx</span>
+<span class="kw">public boolean</span> isActivo() {
+    <span class="kw">return</span> activo;
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Atributo final de instancia</div>
+      <pre><span class="cm">// final en atributo → solo se asigna una vez (en constructor)</span>
+<span class="kw">public class</span> Persona {
+    <span class="kw">private final</span> String dni;   <span class="cm">// no cambia nunca</span>
+    <span class="kw">private</span> String nombre;       <span class="cm">// sí puede cambiar</span>
+
+    <span class="kw">public</span> Persona(String dni, String nombre) {
+        <span class="kw">this</span>.dni    = dni;     <span class="cm">// única asignación posible</span>
+        <span class="kw">this</span>.nombre = nombre;
+    }
+
+    <span class="kw">public</span> String getDni() { <span class="kw">return</span> dni; }
+    <span class="cm">// No hay setDni() — el DNI es inmutable</span>
+}</pre>
+    </div>
+  </div>
+
+  <!-- OO4 STATIC / FINAL -->
+  <div id="oo4" class="inner-section">
+    <div class="card">
+      <div class="card-title">static — atributos y métodos de clase</div>
+      <pre><span class="kw">public class</span> CuentaCorriente {
+    <span class="cm">// Compartido por TODOS los objetos de la clase</span>
+    <span class="kw">public static</span> String banco;
+    <span class="kw">public static final</span> String moneda = <span class="str">"€"</span>;  <span class="cm">// constante</span>
+
+    <span class="cm">// Método estático: no necesita objeto para llamarse</span>
+    <span class="kw">public static void</span> setBanco(String b) {
+        CuentaCorriente.banco = b;
+    }
+}
+
+<span class="cm">// Uso: a través de la clase, NO del objeto</span>
+CuentaCorriente.banco = <span class="str">"BBVA"</span>;
+CuentaCorriente.setBanco(<span class="str">"Santander"</span>);
+System.out.println(CuentaCorriente.moneda);  <span class="cm">// €</span></pre>
+      <div class="warn">Un método <code>static</code> NO puede usar <code>this</code> ni acceder a atributos de instancia.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">static vs instancia — resumen</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">Atributo static</span><span class="mref-desc">Uno por clase. Todos los objetos comparten el mismo valor.</span></div>
+        <div class="mref-row"><span class="mref-name">Atributo instancia</span><span class="mref-desc">Uno por objeto. Cada objeto tiene su propio valor.</span></div>
+        <div class="mref-row"><span class="mref-name">Método static</span><span class="mref-desc">Se llama con NombreClase.metodo(). Sin this. Sin atributos de instancia.</span></div>
+        <div class="mref-row"><span class="mref-name">Método instancia</span><span class="mref-desc">Se llama con objeto.metodo(). Accede a this y a todos los atributos.</span></div>
+        <div class="mref-row"><span class="mref-name">final (atributo)</span><span class="mref-desc">Solo se asigna una vez. Generalmente en el constructor.</span></div>
+        <div class="mref-row"><span class="mref-name">static final</span><span class="mref-desc">Constante de clase. Convención: NOMBRE_EN_MAYUSCULAS.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OO5 HERENCIA -->
+  <div id="oo5" class="inner-section">
+    <div class="card">
+      <div class="card-title">extends — herencia básica</div>
+      <pre><span class="cm">// Clase padre (superclase)</span>
+<span class="kw">public class</span> Empleado {
+    <span class="kw">protected</span> String nombre;   <span class="cm">// protected → accesible en subclases</span>
+    <span class="kw">protected</span> String dni;
+
+    <span class="kw">public</span> Empleado(String nombre, String dni) {
+        <span class="kw">this</span>.nombre = nombre;
+        <span class="kw">this</span>.dni    = dni;
+    }
+    <span class="kw">public void</span> mostrarInfo() {
+        System.out.println(<span class="str">"Nombre: "</span> + nombre);
+        System.out.println(<span class="str">"DNI: "</span>    + dni);
+    }
+}
+
+<span class="cm">// Clase hija (subclase) — hereda todo lo de Empleado</span>
+<span class="kw">public class</span> Maquinista <span class="kw">extends</span> Empleado {
+    <span class="kw">private</span> String rango;
+    <span class="kw">private double</span> sueldo;
+
+    <span class="kw">public</span> Maquinista(String nombre, String dni, String rango, <span class="kw">double</span> sueldo) {
+        <span class="kw">super</span>(nombre, dni);   <span class="cm">// llama al constructor del padre — PRIMERA línea</span>
+        <span class="kw">this</span>.rango  = rango;
+        <span class="kw">this</span>.sueldo = sueldo;
+    }
+
+    <span class="kw">@Override</span>
+    <span class="kw">public void</span> mostrarInfo() {
+        <span class="kw">super</span>.mostrarInfo();   <span class="cm">// reutiliza el método del padre</span>
+        System.out.println(<span class="str">"Rango: "</span>  + rango);
+        System.out.println(<span class="str">"Sueldo: "</span> + sueldo);
+    }
+}</pre>
+      <div class="tip"><code>super(…)</code> llama al constructor del padre. <code>super.metodo()</code> llama al método del padre. Ambos deben ir en la primera línea de su contexto.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">@Override — sobrescribir un método</div>
+      <pre><span class="cm">// @Override indica que se reemplaza el comportamiento del padre</span>
+<span class="cm">// Si el método no existe en el padre → error de compilación (te avisa)</span>
+<span class="kw">@Override</span>
+<span class="kw">public</span> String toString() {
+    <span class="kw">return</span> <span class="str">"{"</span> + <span class="str">"nombre="</span> + nombre + <span class="str">"}"</span>;
+}
+
+<span class="cm">// toString se llama automáticamente al hacer System.out.println(objeto)</span>
+<span class="cm">// Si no lo defines, imprime algo como: Maquinista@1a2b3c</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Relación entre clases — composición</div>
+      <pre><span class="cm">// Un objeto tiene como atributo a otro objeto</span>
+<span class="kw">public class</span> Locomotora {
+    <span class="kw">private</span> Mecanico mecanico;   <span class="cm">// composición: Locomotora "tiene un" Mecanico</span>
+
+    <span class="kw">public</span> Locomotora(String matricula, Mecanico mec) {
+        <span class="kw">this</span>.mecanico = mec;      <span class="cm">// se pasa el objeto ya creado</span>
+    }
+}
+
+<span class="cm">// En main:</span>
+Mecanico m = <span class="kw">new</span> Mecanico(<span class="str">"Juan"</span>, <span class="str">"555"</span>, <span class="str">"Motores"</span>);
+Locomotora l = <span class="kw">new</span> Locomotora(<span class="str">"4587PQE"</span>, m);  <span class="cm">// pasar objeto como parámetro</span></pre>
+      <div class="tip">Herencia = "es un". Composición = "tiene un". Prefiere composición cuando no hay una relación "es un" clara.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Casting — subclase ↔ superclase</div>
+      <pre><span class="cm">// Upcasting (implícito) — subclase a superclase</span>
+Empleado e = <span class="kw">new</span> Maquinista(<span class="str">"Juan"</span>, <span class="str">"123"</span>, <span class="str">"Senior"</span>, <span class="num">2000</span>);
+
+<span class="cm">// Downcasting (explícito) — superclase a subclase</span>
+Maquinista m = (Maquinista) e;
+
+<span class="cm">// Comprobar tipo antes de hacer downcast</span>
+<span class="kw">if</span> (e <span class="kw">instanceof</span> Maquinista) {
+    Maquinista m2 = (Maquinista) e;
+    m2.mostrarInfo();
+}
+
+<span class="cm">// Lo mismo aparece en ListaObject: guardar Object, recuperar con cast</span>
+Persona p = (Persona) lista.obtener(i);</pre>
+    </div>
+  </div>
+
+  <!-- OO6 COLECCIONES -->
+  <div id="oo6" class="inner-section">
+    <div class="card">
+      <div class="card-title">Lista dinámica — patrón con array redimensionable</div>
+      <pre><span class="kw">public class</span> Lista {
+    <span class="kw">public</span> Integer[] tabla;
+    <span class="kw">public int</span> contador;       <span class="cm">// nº de elementos reales</span>
+
+    <span class="kw">public</span> Lista(<span class="kw">int</span> tamaño) {
+        tabla    = <span class="kw">new</span> Integer[tamaño];
+        contador = <span class="num">0</span>;
+    }
+
+    <span class="kw">public void</span> insertarNumeroFinal(<span class="kw">int</span> n) {
+        <span class="kw">if</span> (contador == tabla.length) redimensionar();
+        tabla[contador] = n;
+        contador++;
+    }
+
+    <span class="kw">public void</span> eliminarElemento(<span class="kw">int</span> indice) {
+        <span class="kw">for</span> (<span class="kw">int</span> i=indice; i&lt;contador-<span class="num">1</span>; i++)
+            tabla[i] = tabla[i+<span class="num">1</span>];
+        contador--;
+    }
+
+    <span class="kw">protected void</span> redimensionar() {
+        tabla = Arrays.copyOf(tabla, tabla.length + <span class="num">1</span>);
+    }
+
+    <span class="kw">@Override</span>
+    <span class="kw">public</span> String toString() {
+        String r = <span class="str">"["</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;contador; i++) {
+            r += tabla[i] + (i &lt; contador-<span class="num">1</span> ? <span class="str">", "</span> : <span class="str">""</span>);
+        }
+        <span class="kw">return</span> r + <span class="str">"]"</span>;
+    }
+}</pre>
+      <div class="tip">Usa <code>contador</code> para los elementos reales. <code>tabla.length</code> es la capacidad física del array, que puede ser mayor.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Pila (Stack) — LIFO: último en entrar, primero en salir</div>
+      <pre><span class="kw">public void</span> apilar(Integer e) {
+    <span class="kw">if</span> (numeroElementos == tabla.length)
+        tabla = Arrays.copyOf(tabla, tabla.length + <span class="num">10</span>);
+    tabla[numeroElementos] = e;
+    numeroElementos++;
+}
+
+<span class="kw">public</span> Integer desapilar() {
+    <span class="kw">if</span> (numeroElementos == <span class="num">0</span>) <span class="kw">return null</span>;
+    Integer ult = tabla[numeroElementos - <span class="num">1</span>];
+    tabla[numeroElementos - <span class="num">1</span>] = <span class="kw">null</span>;
+    numeroElementos--;
+    <span class="kw">if</span> (tabla.length - numeroElementos &gt; <span class="num">10</span>)
+        tabla = Arrays.copyOf(tabla, tabla.length - <span class="num">10</span>);
+    <span class="kw">return</span> ult;
+}
+
+<span class="kw">public boolean</span> vacia() { <span class="kw">return</span> numeroElementos == <span class="num">0</span>; }
+
+<span class="cm">// Uso típico:</span>
+<span class="kw">while</span> (!pila.vacia()) System.out.println(pila.desapilar());</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Cola (Queue) — FIFO: primero en entrar, primero en salir</div>
+      <pre><span class="cm">// encolar → insertar al final (igual que pila)</span>
+<span class="kw">public void</span> encolar(<span class="kw">int</span> n) { insertarNumeroFinal(n); }
+
+<span class="cm">// desencolar → sacar el primero (índice 0)</span>
+<span class="kw">public void</span> desencolar() {
+    <span class="kw">int</span> aux = tabla[<span class="num">0</span>];
+    <span class="cm">// mover todos una posición a la izquierda</span>
+    tabla[<span class="num">0</span>] = tabla[tabla.length - <span class="num">1</span>];
+    tabla = Arrays.copyOf(tabla, tabla.length - <span class="num">1</span>);
+    contador--;
+}
+
+<span class="kw">public int</span> frente()  { <span class="kw">return</span> tabla[<span class="num">0</span>]; }
+<span class="kw">public int</span> ultimo()  { <span class="kw">return</span> tabla[contador - <span class="num">1</span>]; }</pre>
+      <div class="info">Pila: apila/desapila por el mismo extremo (fin). Cola: entra por el fin, sale por el frente.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Insertar al principio y en un índice</div>
+      <pre><span class="cm">// Al principio: desplazar todo a la derecha primero</span>
+<span class="kw">public void</span> insertarAlPrincipio(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (contador == tabla.length) redimensionar();
+    <span class="kw">for</span> (<span class="kw">int</span> i=contador; i&gt;<span class="num">0</span>; i--)
+        tabla[i] = tabla[i-<span class="num">1</span>];
+    tabla[<span class="num">0</span>] = n;
+    contador++;
+}
+
+<span class="cm">// En un índice: desplazar desde el índice hacia la derecha</span>
+<span class="kw">public void</span> insertarEnIndice(<span class="kw">int</span> indice, <span class="kw">int</span> n) {
+    <span class="kw">if</span> (contador == tabla.length) redimensionar();
+    <span class="kw">for</span> (<span class="kw">int</span> i=contador; i&gt;indice; i--)
+        tabla[i] = tabla[i-<span class="num">1</span>];
+    tabla[indice] = n;
+    contador++;
+}</pre>
+    </div>
+  </div>
+
+  <!-- OO7 PATRONES -->
+  <div id="oo7" class="inner-section">
+    <div class="card">
+      <div class="card-title">Menú interactivo con switch</div>
+      <pre><span class="kw">public static int</span> mostrarMenu() {
+    Scanner sc = <span class="kw">new</span> Scanner(System.in);
+    System.out.println(<span class="str">"1. Añadir"</span>);
+    System.out.println(<span class="str">"2. Mostrar"</span>);
+    System.out.println(<span class="str">"3. Buscar"</span>);
+    System.out.println(<span class="str">"4. Salir"</span>);
+    <span class="kw">return</span> sc.nextInt();
+}
+
+<span class="cm">// En main:</span>
+<span class="kw">int</span> op = mostrarMenu();
+<span class="kw">while</span> (op != <span class="num">4</span>) {
+    <span class="kw">switch</span> (op) {
+        <span class="kw">case</span> <span class="num">1</span>: añadir(lista);  <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="num">2</span>: mostrar(lista); <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="num">3</span>: buscar(lista);  <span class="kw">break</span>;
+        <span class="kw">default</span>: System.out.println(<span class="str">"Opción incorrecta"</span>);
+    }
+    op = mostrarMenu();
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Buscar objeto por campo (nombre, DNI…)</div>
+      <pre><span class="kw">public static void</span> buscarPorNombre(Lista personas, String nombre) {
+    <span class="kw">boolean</span> encontrado = <span class="kw">false</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;personas.contador; i++) {
+        Persona p = (Persona) personas.tabla[i];   <span class="cm">// downcast</span>
+        <span class="kw">if</span> (p.getNombre().startsWith(nombre)) {
+            System.out.println(p);
+            encontrado = <span class="kw">true</span>;
+        }
+    }
+    <span class="kw">if</span> (!encontrado)
+        System.out.println(<span class="str">"No encontrado: "</span> + nombre);
+}</pre>
+      <div class="tip">Patrón flag + bucle: <code>encontrado</code> empieza en false y se activa si hay coincidencia. Mensaje de "no encontrado" solo si sigue en false al acabar.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">toString para imprimir objetos en colecciones</div>
+      <pre><span class="cm">// Si la clase tiene toString(), se imprime automáticamente</span>
+<span class="kw">@Override</span>
+<span class="kw">public</span> String toString() {
+    <span class="kw">return</span> <span class="str">"{"</span> + <span class="str">"nombre="</span> + nombre
+         + <span class="str">", dni="</span> + dni + <span class="str">"}"</span>;
+}
+
+<span class="cm">// En un array o lista:</span>
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;tren.numVagones; i++)
+    System.out.println(<span class="str">"Vagón "</span> + i + <span class="str">": "</span> + vagones[i]);
+<span class="cm">// vagones[i] llama a toString() del Vagon automáticamente</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Array de objetos — declarar, crear y usar</div>
+      <pre><span class="cm">// 1. Declarar array de objetos</span>
+Vagones[] vagones = <span class="kw">new</span> Vagones[<span class="num">5</span>];  <span class="cm">// 5 referencias null</span>
+
+<span class="cm">// 2. Crear cada objeto por separado</span>
+vagones[<span class="num">0</span>] = <span class="kw">new</span> Vagones(<span class="num">500</span>, <span class="num">260</span>, <span class="str">"Explosivo"</span>);
+vagones[<span class="num">1</span>] = <span class="kw">new</span> Vagones(<span class="num">300</span>, <span class="num">168</span>, <span class="str">"Comida"</span>);
+
+<span class="cm">// 3. Insertar con método controlado</span>
+<span class="kw">public boolean</span> añadirVagon(Vagones v) {
+    <span class="kw">if</span> (numVagones &lt; vagones.length) {
+        vagones[numVagones] = v;
+        numVagones++;
+        <span class="kw">return true</span>;
+    }
+    <span class="kw">return false</span>;   <span class="cm">// array lleno</span>
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Contar vocales — indexOf en String de vocales</div>
+      <pre><span class="cm">// Truco: en vez de array de chars + doble bucle,</span>
+<span class="cm">// usar indexOf sobre un String con todas las vocales</span>
+String vocales = <span class="str">"aeiouAEIOUáéíóúÁÉÍÓÚ"</span>;
+<span class="kw">int</span> cont = <span class="num">0</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;texto.length(); i++) {
+    <span class="kw">if</span> (vocales.indexOf(texto.charAt(i)) != -<span class="num">1</span>)
+        cont++;
+}
+<span class="cm">// indexOf devuelve -1 si no encuentra el char → no es vocal</span></pre>
+    </div>
+  </div>
+
+  <!-- OO8 ERRORES -->
+  <div id="oo8" class="inner-section">
+    <div class="card">
+      <div class="card-title">NullPointerException — objeto no inicializado</div>
+      <pre><span class="cm">// El array reserva espacio para referencias, no objetos</span>
+Vagones[] vagones = <span class="kw">new</span> Vagones[<span class="num">5</span>];
+vagones[<span class="num">0</span>].getTipo();   <span class="cm">// ERROR — vagones[0] es null</span>
+
+<span class="cm">// Solución: crear el objeto antes de usarlo</span>
+vagones[<span class="num">0</span>] = <span class="kw">new</span> Vagones(<span class="num">500</span>, <span class="num">260</span>, <span class="str">"Explosivo"</span>);
+vagones[<span class="num">0</span>].getTipo();   <span class="cm">// OK</span></pre>
+      <div class="err">Un array de objetos es un array de referencias null. Hay que hacer <code>new</code> para cada posición.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Olvidar super() en el constructor de la subclase</div>
+      <pre><span class="cm">// Si el padre NO tiene constructor vacío, la subclase DEBE</span>
+<span class="cm">// llamar a super(…) en la primera línea de su constructor</span>
+<span class="kw">public</span> Maquinista(String nombre, String dni, ...) {
+    <span class="kw">super</span>(nombre, dni);   <span class="cm">// OBLIGATORIO si Empleado no tiene Constructor()</span>
+    ...
+}
+<span class="cm">// Si no se pone → error de compilación</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">this() y super() deben ser la primera línea</div>
+      <pre><span class="cm">// INCORRECTO</span>
+<span class="kw">public</span> Maquinista(String nombre) {
+    <span class="kw">this</span>.rango = <span class="str">"Junior"</span>;
+    <span class="kw">super</span>(nombre, <span class="str">"000"</span>);  <span class="cm">// ERROR — super() no es la primera línea</span>
+}
+
+<span class="cm">// CORRECTO</span>
+<span class="kw">public</span> Maquinista(String nombre) {
+    <span class="kw">super</span>(nombre, <span class="str">"000"</span>);  <span class="cm">// primera línea siempre</span>
+    <span class="kw">this</span>.rango = <span class="str">"Junior"</span>;
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Modificar atributo final</div>
+      <pre><span class="kw">private final</span> String dni;
+
+<span class="cm">// En constructor → OK (única asignación)</span>
+<span class="kw">this</span>.dni = dni;
+
+<span class="cm">// En setter o cualquier otro método → ERROR de compilación</span>
+<span class="kw">public void</span> setDni(String dni) {
+    <span class="kw">this</span>.dni = dni;   <span class="cm">// ERROR — cannot assign a value to final variable</span>
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Acceder a atributo de instancia desde método static</div>
+      <pre><span class="kw">public class</span> Cuenta {
+    <span class="kw">private double</span> saldo;
+    <span class="kw">public static</span> String banco;
+
+    <span class="kw">public static void</span> prueba() {
+        System.out.println(banco);   <span class="cm">// OK — banco es static</span>
+        System.out.println(saldo);   <span class="cm">// ERROR — saldo no es static</span>
+    }
+}</pre>
+      <div class="err">Los métodos <code>static</code> no tienen <code>this</code> y no pueden acceder a atributos de instancia.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">ClassCastException — downcast incorrecto</div>
+      <pre><span class="cm">// Si el objeto no es de ese tipo → excepción en tiempo de ejecución</span>
+Object obj = <span class="str">"Hola"</span>;
+Persona p = (Persona) obj;   <span class="cm">// ClassCastException</span>
+
+<span class="cm">// Siempre comprobar con instanceof antes</span>
+<span class="kw">if</span> (obj <span class="kw">instanceof</span> Persona) {
+    Persona p2 = (Persona) obj;   <span class="cm">// seguro</span>
+}</pre>
+    </div>
+  </div>
+</div><!-- /clases -->
+
+
+<!-- ══════════════════════════════════════════════
+     TOPIC: HERENCIA AVANZADA
+══════════════════════════════════════════════ -->
+<div id="herencia" class="topic-section">
+  <div class="inner-nav">
+    <button class="inner-btn on" onclick="showInner('herencia','h1',this)">Cadenas de herencia</button>
+    <button class="inner-btn"   onclick="showInner('herencia','h2',this)">Clases abstractas</button>
+    <button class="inner-btn"   onclick="showInner('herencia','h3',this)">equals() / toString()</button>
+    <button class="inner-btn"   onclick="showInner('herencia','h4',this)">enum</button>
+    <button class="inner-btn"   onclick="showInner('herencia','h5',this)">ListaObject / Object</button>
+    <button class="inner-btn"   onclick="showInner('herencia','h6',this)">String.format</button>
+    <button class="inner-btn"   onclick="showInner('herencia','h7',this)">Errores comunes</button>
+  </div>
+
+  <!-- H1 CADENAS DE HERENCIA -->
+  <div id="h1" class="inner-section on">
+    <div class="card">
+      <div class="card-title">Cadena de herencia de varios niveles</div>
+      <pre><span class="cm">// Nivel 1 — clase base</span>
+<span class="kw">public class</span> Hora {
+    <span class="kw">protected int</span> hora, minuto;
+
+    <span class="kw">public</span> Hora(<span class="kw">int</span> hora, <span class="kw">int</span> minuto) { ... }
+
+    <span class="kw">public void</span> inc() {            <span class="cm">// incrementa un minuto</span>
+        minuto++;
+        <span class="kw">if</span> (minuto == <span class="num">60</span>) { minuto = <span class="num">0</span>; hora++; }
+        <span class="kw">if</span> (hora   == <span class="num">24</span>) { hora = <span class="num">0</span>; }
+    }
+}
+
+<span class="cm">// Nivel 2 — hereda de Hora, añade segundo</span>
+<span class="kw">public class</span> HoraExacta <span class="kw">extends</span> Hora {
+    <span class="kw">private int</span> segundo;
+
+    <span class="kw">public</span> HoraExacta(<span class="kw">int</span> h, <span class="kw">int</span> m, <span class="kw">int</span> s) {
+        <span class="kw">super</span>(h, m);        <span class="cm">// llama al constructor de Hora</span>
+        <span class="kw">this</span>.segundo = (s &gt;= <span class="num">0</span> && s &lt; <span class="num">60</span>) ? s : <span class="num">0</span>;
+    }
+
+    <span class="kw">@Override</span>
+    <span class="kw">public void</span> inc() {
+        segundo++;
+        <span class="kw">if</span> (segundo == <span class="num">60</span>) {
+            segundo = <span class="num">0</span>;
+            <span class="kw">super</span>.inc();    <span class="cm">// reutiliza el inc() de Hora</span>
+        }
+    }
+}
+
+<span class="cm">// Nivel 3 — hereda de Hora, transforma formato 12h</span>
+<span class="kw">public class</span> Hora12 <span class="kw">extends</span> Hora {
+    <span class="kw">public</span> Hora12(<span class="kw">int</span> hora, <span class="kw">int</span> min, <span class="kw">boolean</span> pm) {
+        <span class="kw">super</span>(pm ? hora + <span class="num">12</span> : hora, min); <span class="cm">// lógica en super()</span>
+    }
+}</pre>
+      <div class="tip">En cada nivel: <code>super(…)</code> en la primera línea del constructor, <code>super.metodo()</code> para reutilizar lógica del padre.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Reglas de herencia — resumen</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">super(…)</span><span class="mref-desc">Llama al constructor del padre. SIEMPRE primera línea del constructor hijo.</span></div>
+        <div class="mref-row"><span class="mref-name">super.metodo()</span><span class="mref-desc">Llama al método del padre desde el hijo. Útil para extender, no solo reemplazar.</span></div>
+        <div class="mref-row"><span class="mref-name">protected</span><span class="mref-desc">Visible en la clase y en todas las subclases. Usar para atributos que las subclases necesitan acceder directamente.</span></div>
+        <div class="mref-row"><span class="mref-name">@Override</span><span class="mref-desc">Marca que se reemplaza un método del padre. Si el método no existe → error de compilación (te avisa de errores tipográficos).</span></div>
+        <div class="mref-row"><span class="mref-name">final (en clase)</span><span class="mref-desc">Una clase final no puede tener subclases: public final class String</span></div>
+        <div class="mref-row"><span class="mref-name">final (en método)</span><span class="mref-desc">Un método final no puede ser sobreescrito por las subclases.</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Herencia + validación en setter/constructor</div>
+      <pre><span class="cm">// Patrón: validar en constructor con ternario</span>
+<span class="kw">this</span>.hora    = (hora &gt;= <span class="num">0</span> && hora &lt; <span class="num">24</span>)  ? hora    : <span class="num">0</span>;
+<span class="kw">this</span>.minuto  = (minuto &gt;= <span class="num">0</span> && minuto &lt; <span class="num">60</span>) ? minuto : <span class="num">0</span>;
+
+<span class="cm">// Patrón: validar en setter (no cambia si el valor es inválido)</span>
+<span class="kw">public void</span> setMinuto(<span class="kw">int</span> minuto) {
+    <span class="kw">if</span> (minuto &gt;= <span class="num">0</span> && minuto &lt; <span class="num">60</span>)
+        <span class="kw">this</span>.minuto = minuto;
+    <span class="cm">// si no es válido, simplemente no hace nada</span>
+}
+
+<span class="cm">// Subclase puede sobreescribir el setter y añadir su lógica</span>
+<span class="kw">@Override</span>
+<span class="kw">public void</span> setHora(<span class="kw">int</span> hora, <span class="kw">boolean</span> pm) {
+    <span class="kw">super</span>.setHora(pm ? hora + <span class="num">12</span> : hora);
+}</pre>
+    </div>
+  </div>
+
+  <!-- H2 CLASES ABSTRACTAS -->
+  <div id="h2" class="inner-section">
+    <div class="card">
+      <div class="card-title">abstract — clase e interfaz sin implementar</div>
+      <pre><span class="cm">// Clase abstracta: no se puede instanciar directamente</span>
+<span class="kw">public abstract class</span> Instrumento {
+    <span class="kw">protected</span> String[] notas = <span class="kw">new</span> String[<span class="num">0</span>];
+    <span class="kw">protected int</span> numNotas = <span class="num">0</span>;
+
+    <span class="cm">// Método abstracto: obliga a las subclases a implementarlo</span>
+    <span class="kw">public abstract void</span> interpretar();
+
+    <span class="cm">// Método concreto: se hereda tal cual</span>
+    <span class="kw">public void</span> add(String nota) {
+        notas = Arrays.copyOf(notas, notas.length + <span class="num">1</span>);
+        notas[numNotas++] = nota;
+    }
+}
+
+<span class="cm">// Subclase concreta: DEBE implementar todos los métodos abstractos</span>
+<span class="kw">public class</span> Piano <span class="kw">extends</span> Instrumento {
+    <span class="kw">@Override</span>
+    <span class="kw">public void</span> interpretar() {
+        System.out.println(<span class="str">"Notas del Piano:"</span>);
+        <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;notas.length; i++)
+            System.out.println((i+<span class="num">1</span>) + <span class="str">" --> "</span> + notas[i]);
+    }
+}
+
+<span class="cm">// Uso</span>
+Piano p = <span class="kw">new</span> Piano();
+p.add(<span class="str">"do"</span>); p.add(<span class="str">"re"</span>);
+p.interpretar();
+
+<span class="cm">// Instrumento i = new Instrumento();  → ERROR, no se puede instanciar</span></pre>
+      <div class="warn">Si la subclase no implementa TODOS los métodos abstractos, también debe declararse <code>abstract</code>.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">abstract vs clase normal — cuándo usar cada una</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">Clase normal</span><span class="mref-desc">Tiene implementación completa. Se puede instanciar directamente con new.</span></div>
+        <div class="mref-row"><span class="mref-name">Clase abstracta</span><span class="mref-desc">Puede tener métodos sin implementar. NO se puede instanciar. Sirve como "plantilla" para las subclases.</span></div>
+        <div class="mref-row"><span class="mref-name">Método abstracto</span><span class="mref-desc">Solo declara la firma (nombre, parámetros, tipo retorno). Sin cuerpo. La subclase pone el cuerpo.</span></div>
+        <div class="mref-row"><span class="mref-name">Cuándo usarla</span><span class="mref-desc">Cuando varias subclases comparten código (métodos concretos) pero tienen comportamiento propio que debe estar sí o sí (métodos abstractos).</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- H3 EQUALS / TOSTRING -->
+  <div id="h3" class="inner-section">
+    <div class="card">
+      <div class="card-title">Sobreescribir equals()</div>
+      <pre><span class="cm">// Firma exacta: recibe Object, no el tipo propio</span>
+<span class="kw">@Override</span>
+<span class="kw">public boolean</span> equals(Object otra) {
+    <span class="cm">// 1. Comprobar tipo con instanceof</span>
+    <span class="kw">if</span> (otra <span class="kw">instanceof</span> HoraExacta) {
+        <span class="cm">// 2. Downcast seguro</span>
+        HoraExacta o = (HoraExacta) otra;
+        <span class="cm">// 3. Comparar campo a campo</span>
+        <span class="kw">return</span> hora == o.hora && minuto == o.minuto && segundo == o.segundo;
+    }
+    <span class="kw">return false</span>;   <span class="cm">// si no es del mismo tipo, no son iguales</span>
+}
+
+<span class="cm">// Uso:</span>
+HoraExacta h1 = <span class="kw">new</span> HoraExacta(<span class="num">9</span>,<span class="num">30</span>,<span class="num">0</span>);
+HoraExacta h2 = <span class="kw">new</span> HoraExacta(<span class="num">9</span>,<span class="num">30</span>,<span class="num">0</span>);
+h1.equals(h2);  <span class="cm">// true — compara contenido</span>
+h1 == h2;       <span class="cm">// false — compara referencias</span></pre>
+      <div class="warn">Sin sobreescribir <code>equals()</code>, dos objetos distintos con los mismos valores dan <code>false</code> con ==. Siempre sobreescribe equals() para comparar por contenido.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Sobreescribir toString() en subclases</div>
+      <pre><span class="cm">// Clase padre</span>
+<span class="kw">@Override</span>
+<span class="kw">public</span> String toString() {
+    <span class="kw">return</span> String.format(<span class="str">"%02d:%02d"</span>, hora, minuto);
+}
+
+<span class="cm">// Subclase — formato diferente para el mismo dato</span>
+<span class="kw">@Override</span>
+<span class="kw">public</span> String toString() {
+    <span class="kw">return</span> String.format(<span class="str">"%02d:%02d:%02d"</span>, hora, minuto, segundo);
+}
+
+<span class="cm">// Subclase Hora12 — reutiliza lógica propia</span>
+<span class="kw">@Override</span>
+<span class="kw">public</span> String toString() {
+    String ampm = (hora &lt; <span class="num">12</span>) ? <span class="str">"AM"</span> : <span class="str">"PM"</span>;
+    <span class="kw">int</span> h = (hora &gt; <span class="num">12</span>) ? hora - <span class="num">12</span> : hora;
+    <span class="kw">return</span> h + <span class="str">":"</span> + minuto + <span class="str">" "</span> + ampm;
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Herencia de CajaCarton — sobreescribir método con lógica diferente</div>
+      <pre><span class="cm">// Padre: Caja</span>
+<span class="kw">public double</span> getVolumen() {
+    <span class="kw">double</span> vol = alto * ancho * fondo;
+    <span class="kw">if</span> (unidad == Unidades.CM) vol /= <span class="num">1000000</span>;
+    <span class="kw">return</span> vol;
+}
+
+<span class="cm">// Hijo: CajaCarton — misma firma, diferente cálculo</span>
+<span class="kw">@Override</span>
+<span class="kw">public double</span> getVolumen() {
+    <span class="kw">return</span> alto * ancho * fondo * <span class="num">0.8</span>;  <span class="cm">// volumen útil (80%)</span>
+}
+
+<span class="cm">// Método nuevo solo en la subclase</span>
+<span class="kw">public double</span> getAreaTotal() {
+    <span class="kw">return</span> <span class="num">2</span> * (alto*ancho + alto*fondo + ancho*fondo);
+}
+
+<span class="cm">// Constructor: pasar parámetro fijo al padre</span>
+<span class="kw">public</span> CajaCarton(<span class="kw">int</span> ancho, <span class="kw">int</span> alto, <span class="kw">int</span> fondo) {
+    <span class="kw">super</span>(ancho, alto, fondo, Unidades.CM, <span class="kw">true</span>); <span class="cm">// unidad fija</span>
+}</pre>
+    </div>
+  </div>
+
+  <!-- H4 ENUM -->
+  <div id="h4" class="inner-section">
+    <div class="card">
+      <div class="card-title">enum — tipo enumerado</div>
+      <pre><span class="cm">// Declarar enum (en su propio archivo .java)</span>
+<span class="kw">public enum</span> Unidades {
+    CM,
+    M
+}
+
+<span class="kw">public enum</span> Meses {
+    ENERO, FEBRERO, MARZO, ABRIL, MAYO, JUNIO,
+    JULIO, AGOSTO, SEPTIEMBRE, OCTUBRE, NOVIEMBRE, DICIEMBRE
+}
+
+<span class="cm">// Usar enum</span>
+Unidades u = Unidades.CM;
+Meses actual = Meses.ENERO;
+
+<span class="cm">// Comparar enum con ==</span>
+<span class="kw">if</span> (u == Unidades.CM) { ... }
+
+<span class="cm">// Comparar enum en switch</span>
+<span class="kw">switch</span> (u) {
+    <span class="kw">case</span> CM: System.out.println(<span class="str">"centímetros"</span>); <span class="kw">break</span>;
+    <span class="kw">case</span> M:  System.out.println(<span class="str">"metros"</span>);       <span class="kw">break</span>;
+}
+
+<span class="cm">// Recorrer todos los valores de un enum</span>
+<span class="kw">for</span> (Meses m : Meses.values()) {
+    System.out.println(m);
+}</pre>
+      <div class="tip">Con enum se compara con <code>==</code>, NO con <code>equals()</code>. Es uno de los pocos casos donde == es correcto para comparar objetos.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">enum con atributos y métodos</div>
+      <pre><span class="cm">// Los enum también pueden tener atributos y constructores</span>
+<span class="kw">public enum</span> Unidades {
+    CM(<span class="num">0.01</span>),
+    M(<span class="num">1.0</span>);
+
+    <span class="kw">private final double</span> factor;
+
+    Unidades(<span class="kw">double</span> factor) {  <span class="cm">// constructor privado por defecto</span>
+        <span class="kw">this</span>.factor = factor;
+    }
+
+    <span class="kw">public double</span> getFactor() { <span class="kw">return</span> factor; }
+}
+
+<span class="cm">// Uso:</span>
+<span class="kw">double</span> f = Unidades.CM.getFactor();  <span class="cm">// 0.01</span></pre>
+    </div>
+  </div>
+
+  <!-- H5 LISTAOBJECT / OBJECT -->
+  <div id="h5" class="inner-section">
+    <div class="card">
+      <div class="card-title">Object — la superclase de todo en Java</div>
+      <pre><span class="cm">// Todo en Java hereda de Object (implícitamente)</span>
+<span class="cm">// Object tiene métodos que podemos sobreescribir:</span>
+<span class="cm">// → toString()  → para imprimir</span>
+<span class="cm">// → equals()    → para comparar por contenido</span>
+
+<span class="cm">// ListaObject — lista genérica que acepta cualquier tipo</span>
+<span class="kw">public class</span> ListaObject {
+    <span class="kw">protected</span> Object[] tabla;  <span class="cm">// array de Object acepta cualquier cosa</span>
+    <span class="kw">protected int</span> numeroElementos;
+
+    <span class="kw">public void</span> insertarAlFinal(Object elemento) {
+        <span class="kw">if</span> (numeroElementos == tabla.length)
+            tabla = Arrays.copyOf(tabla, numeroElementos + <span class="num">10</span>);
+        tabla[numeroElementos++] = elemento;
+    }
+
+    <span class="kw">public</span> Object obtener(<span class="kw">int</span> pos) { <span class="kw">return</span> tabla[pos]; }
+
+    <span class="kw">public int</span> buscar(Object elemento) {
+        <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;numeroElementos; i++)
+            <span class="kw">if</span> (tabla[i].equals(elemento)) <span class="kw">return</span> i;
+        <span class="kw">return</span> -<span class="num">1</span>;
+    }
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Guardar y recuperar objetos de ListaObject</div>
+      <pre><span class="cm">// Insertar — acepta cualquier tipo (upcasting implícito)</span>
+ListaObject lista = <span class="kw">new</span> ListaObject();
+lista.insertarAlFinal(<span class="kw">new</span> Persona(<span class="str">"123A"</span>, <span class="str">"Juan"</span>));
+lista.insertarAlFinal(<span class="str">"texto"</span>);    <span class="cm">// también acepta Strings</span>
+lista.insertarAlFinal(<span class="num">3.80</span>);       <span class="cm">// y doubles (autoboxing)</span>
+
+<span class="cm">// Recuperar — hay que hacer downcast explícito</span>
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;lista.numeroElementos(); i++) {
+    Object obj = lista.obtener(i);
+
+    <span class="kw">if</span> (obj <span class="kw">instanceof</span> Persona) {
+        Persona p = (Persona) obj;      <span class="cm">// downcast</span>
+        System.out.println(p.getNombre());
+    } <span class="kw">else if</span> (obj <span class="kw">instanceof</span> String) {
+        String s = (String) obj;
+        System.out.println(s.toUpperCase());
+    } <span class="kw">else</span> {
+        System.out.println(obj);        <span class="cm">// llama a toString()</span>
+    }
+}</pre>
+      <div class="tip">Antes de hacer downcast, siempre comprueba con <code>instanceof</code>. Sin comprobación puede lanzar <code>ClassCastException</code>.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">buscar() usa equals() — importancia de sobreescribirlo</div>
+      <pre><span class="cm">// ListaObject.buscar() compara con .equals()</span>
+<span class="kw">public int</span> buscar(Object elemento) {
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;numeroElementos; i++)
+        <span class="kw">if</span> (tabla[i].equals(elemento)) <span class="kw">return</span> i;
+    <span class="kw">return</span> -<span class="num">1</span>;
+}
+
+<span class="cm">// Si Persona NO sobreescribe equals() → busca por referencia (casi siempre -1)</span>
+<span class="cm">// Si Persona SÍ sobreescribe equals() → busca por contenido (dni, nombre…)</span>
+
+<span class="cm">// Regla: si vas a buscar objetos en una lista, define equals() en su clase</span></pre>
+    </div>
+  </div>
+
+  <!-- H6 STRING.FORMAT -->
+  <div id="h6" class="inner-section">
+    <div class="card">
+      <div class="card-title">String.format() — formatear texto con precisión</div>
+      <pre><span class="cm">// Sintaxis: String.format("plantilla", valores...)</span>
+
+<span class="cm">// Entero con ceros a la izquierda → %02d</span>
+String.format(<span class="str">"%02d:%02d"</span>, <span class="num">9</span>, <span class="num">5</span>)      <span class="cm">// "09:05"</span>
+String.format(<span class="str">"%02d:%02d:%02d"</span>, <span class="num">9</span>, <span class="num">5</span>, <span class="num">3</span>) <span class="cm">// "09:05:03"</span>
+
+<span class="cm">// Número de decimales → %.2f</span>
+String.format(<span class="str">"%.2f"</span>, <span class="num">3.14159</span>)      <span class="cm">// "3.14"</span>
+String.format(<span class="str">"%.0f m³"</span>, <span class="num">17625.0</span>)  <span class="cm">// "17625 m³"</span>
+
+<span class="cm">// Ancho mínimo → %5d (rellena con espacios a la izquierda)</span>
+String.format(<span class="str">"%5d"</span>, <span class="num">42</span>)            <span class="cm">// "   42"</span>
+String.format(<span class="str">"%-5d"</span>, <span class="num">42</span>)           <span class="cm">// "42   " (alineado izquierda)</span>
+
+<span class="cm">// String con ancho</span>
+String.format(<span class="str">"%-10s|"</span>, <span class="str">"hola"</span>)      <span class="cm">// "hola      |"</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Especificadores de formato más usados</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">%d</span><span class="mref-desc">Entero decimal (int, long)</span></div>
+        <div class="mref-row"><span class="mref-name">%02d</span><span class="mref-desc">Entero con mínimo 2 dígitos, rellena con ceros. Muy útil para horas, fechas.</span></div>
+        <div class="mref-row"><span class="mref-name">%f</span><span class="mref-desc">Número real (double, float). Por defecto 6 decimales.</span></div>
+        <div class="mref-row"><span class="mref-name">%.2f</span><span class="mref-desc">Número real con exactamente 2 decimales.</span></div>
+        <div class="mref-row"><span class="mref-name">%s</span><span class="mref-desc">String (llama a toString() si es un objeto).</span></div>
+        <div class="mref-row"><span class="mref-name">%c</span><span class="mref-desc">Un carácter (char).</span></div>
+        <div class="mref-row"><span class="mref-name">%b</span><span class="mref-desc">Boolean (true / false).</span></div>
+        <div class="mref-row"><span class="mref-name">%n</span><span class="mref-desc">Salto de línea (equivale a \n pero portable).</span></div>
+      </div>
+      <pre style="margin-top:10px"><span class="cm">// Combinar varios especificadores</span>
+String.format(<span class="str">"Nombre: %-15s DNI: %s"</span>, nombre, dni)
+<span class="cm">// "Nombre: Juan            DNI: 12345678A"</span>
+
+<span class="cm">// También funciona en toString()</span>
+<span class="kw">@Override</span>
+<span class="kw">public</span> String toString() {
+    <span class="kw">return</span> String.format(<span class="str">"%02d:%02d:%02d"</span>, hora, minuto, segundo);
+}</pre>
+    </div>
+  </div>
+
+  <!-- H7 ERRORES COMUNES -->
+  <div id="h7" class="inner-section">
+    <div class="card">
+      <div class="card-title">Instanciar una clase abstracta</div>
+      <pre><span class="cm">// ERROR — no se puede hacer new de una clase abstracta</span>
+Instrumento i = <span class="kw">new</span> Instrumento();   <span class="cm">// Error de compilación</span>
+
+<span class="cm">// CORRECTO — instanciar la subclase concreta</span>
+Instrumento i = <span class="kw">new</span> Piano();         <span class="cm">// OK (upcasting implícito)</span>
+Piano p       = <span class="kw">new</span> Piano();         <span class="cm">// OK</span></pre>
+      <div class="err">Una clase abstracta solo puede usarse como tipo de variable, no con <code>new</code>.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">No implementar todos los métodos abstractos</div>
+      <pre><span class="kw">public abstract class</span> Instrumento {
+    <span class="kw">public abstract void</span> interpretar();
+    <span class="kw">public abstract void</span> afinar();       <span class="cm">// segundo método abstracto</span>
+}
+
+<span class="cm">// ERROR — Piano no implementa afinar()</span>
+<span class="kw">public class</span> Piano <span class="kw">extends</span> Instrumento {
+    <span class="kw">@Override</span>
+    <span class="kw">public void</span> interpretar() { ... }   <span class="cm">// solo implementa uno</span>
+    <span class="cm">// falta afinar() → error de compilación</span>
+}
+
+<span class="cm">// Solución A: implementar todos</span>
+<span class="cm">// Solución B: declarar Piano también abstract</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">equals() con firma incorrecta</div>
+      <pre><span class="cm">// INCORRECTO — no sobreescribe, crea un método nuevo</span>
+<span class="kw">public boolean</span> equals(HoraExacta otra) { ... }
+
+<span class="cm">// CORRECTO — el parámetro debe ser Object</span>
+<span class="kw">@Override</span>
+<span class="kw">public boolean</span> equals(Object otra) {
+    <span class="kw">if</span> (otra <span class="kw">instanceof</span> HoraExacta) {
+        HoraExacta o = (HoraExacta) otra;
+        <span class="kw">return</span> hora==o.hora && minuto==o.minuto;
+    }
+    <span class="kw">return false</span>;
+}</pre>
+      <div class="err">Si el parámetro no es <code>Object</code>, Java no lo trata como sobreescritura de <code>Object.equals()</code>. Añade <code>@Override</code> para que te avise si te equivocas.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Usar == para comparar enum vs comparar Strings</div>
+      <pre><span class="cm">// Enum → usar ==</span>
+<span class="kw">if</span> (unidad == Unidades.CM) ...    <span class="cm">// CORRECTO</span>
+<span class="kw">if</span> (unidad.equals(Unidades.CM)) ... <span class="cm">// también funciona, pero innecesario</span>
+
+<span class="cm">// String → NUNCA usar ==</span>
+<span class="kw">if</span> (nombre == <span class="str">"Pepe"</span>) ...         <span class="cm">// INCORRECTO</span>
+<span class="kw">if</span> (nombre.equals(<span class="str">"Pepe"</span>)) ...     <span class="cm">// CORRECTO</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">ClassCastException en ListaObject</div>
+      <pre><span class="cm">// Lista con tipos mezclados</span>
+lista.insertarAlFinal(<span class="str">"texto"</span>);
+lista.insertarAlFinal(<span class="num">42</span>);
+
+<span class="cm">// ERROR — intentar castear sin comprobar</span>
+Persona p = (Persona) lista.obtener(<span class="num">0</span>);   <span class="cm">// ClassCastException</span>
+
+<span class="cm">// CORRECTO — comprobar primero</span>
+Object obj = lista.obtener(<span class="num">0</span>);
+<span class="kw">if</span> (obj <span class="kw">instanceof</span> Persona) {
+    Persona p = (Persona) obj;
+}</pre>
+    </div>
+  </div>
+
+</div><!-- /herencia -->
+
+
+<!-- ══════════════════════════════════════════════
+     TOPIC: INTERFACES / ORDENACIÓN
+══════════════════════════════════════════════ -->
+<div id="interfaces" class="topic-section">
+  <div class="inner-nav">
+    <button class="inner-btn on" onclick="showInner('interfaces','i1',this)">interface</button>
+    <button class="inner-btn"   onclick="showInner('interfaces','i2',this)">Comparable</button>
+    <button class="inner-btn"   onclick="showInner('interfaces','i3',this)">Comparator</button>
+    <button class="inner-btn"   onclick="showInner('interfaces','i4',this)">Arrays.sort</button>
+    <button class="inner-btn"   onclick="showInner('interfaces','i5',this)">Excepciones</button>
+    <button class="inner-btn"   onclick="showInner('interfaces','i6',this)">Ficheros</button>
+    <button class="inner-btn"   onclick="showInner('interfaces','i7',this)">Errores comunes</button>
+  </div>
+
+  <!-- I1 INTERFACE -->
+  <div id="i1" class="inner-section on">
+    <div class="card">
+      <div class="card-title">¿Qué es una interface?</div>
+      <pre><span class="cm">// Una interface define un CONTRATO: métodos que la clase DEBE implementar</span>
+<span class="cm">// No tiene implementación propia (solo firmas)</span>
+<span class="kw">public interface</span> Pila {
+    <span class="kw">void</span>    apilar(Integer numero);   <span class="cm">// sin cuerpo</span>
+    Integer desapilar();
+    <span class="kw">boolean</span> vacia();
+}
+
+<span class="cm">// Una clase implementa la interface con implements</span>
+<span class="kw">public class</span> PilaTabla <span class="kw">implements</span> Pila {
+    <span class="kw">@Override</span>
+    <span class="kw">public void</span> apilar(Integer n) { ... }   <span class="cm">// OBLIGATORIO implementar todos</span>
+    <span class="kw">@Override</span>
+    <span class="kw">public</span> Integer desapilar() { ... }
+    <span class="kw">@Override</span>
+    <span class="kw">public boolean</span> vacia() { ... }
+}
+
+<span class="cm">// Otra clase puede implementar la misma interface de forma diferente</span>
+<span class="kw">public class</span> PilaLista <span class="kw">implements</span> Pila { ... }
+
+<span class="cm">// En main: usar la interface como tipo (polimorfismo)</span>
+Pila p = <span class="kw">new</span> PilaTabla();  <span class="cm">// o new PilaLista() — intercambiable</span>
+p.apilar(<span class="num">42</span>);</pre>
+      <div class="tip">La interface es el tipo. Las clases concretas son las implementaciones. Puedes cambiar <code>PilaTabla</code> por <code>PilaLista</code> sin tocar el código que usa la pila.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">interface vs abstract — diferencias clave</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">interface</span><span class="mref-desc">Solo firmas (sin código). Una clase puede implementar VARIAS interfaces.</span></div>
+        <div class="mref-row"><span class="mref-name">abstract class</span><span class="mref-desc">Puede tener métodos con y sin implementación. Solo se puede extender una.</span></div>
+        <div class="mref-row"><span class="mref-name">implements</span><span class="mref-desc">Palabra clave para implementar una interface. Varias: implements A, B, C</span></div>
+        <div class="mref-row"><span class="mref-name">extends</span><span class="mref-desc">Palabra clave para heredar de una clase (solo una).</span></div>
+        <div class="mref-row"><span class="mref-name">@Override</span><span class="mref-desc">Todos los métodos de la interface deben implementarse o la clase es abstract.</span></div>
+      </div>
+      <pre style="margin-top:10px"><span class="cm">// Una clase puede extender Y implementar a la vez</span>
+<span class="kw">public class</span> MiClase <span class="kw">extends</span> OtraClase <span class="kw">implements</span> InterfazA, InterfazB { ... }</pre>
+    </div>
+  </div>
+
+  <!-- I2 COMPARABLE -->
+  <div id="i2" class="inner-section">
+    <div class="card">
+      <div class="card-title">Comparable — orden natural de la clase</div>
+      <pre><span class="cm">// La clase implementa Comparable para definir su orden "por defecto"</span>
+<span class="kw">public class</span> Articulo <span class="kw">implements</span> Comparable {
+
+    <span class="kw">@Override</span>
+    <span class="kw">public int</span> compareTo(Object o) {
+        Articulo otro = (Articulo) o;
+        <span class="cm">// negativo → this va antes, 0 → iguales, positivo → this va después</span>
+        <span class="kw">return</span> (<span class="kw">int</span>)(<span class="num">100</span> * (<span class="kw">this</span>.precio - otro.precio));
+        <span class="cm">// × 100 para no perder decimales al convertir a int</span>
+    }
+}
+
+<span class="cm">// Arrays.sort sin Comparator → usa compareTo</span>
+Arrays.sort(articulos);    <span class="cm">// ordena por precio (orden natural)</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Qué debe devolver compareTo / compare</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">return negativo</span><span class="mref-desc">El primero va ANTES (es "menor")</span></div>
+        <div class="mref-row"><span class="mref-name">return 0</span><span class="mref-desc">Son iguales en el criterio de ordenación</span></div>
+        <div class="mref-row"><span class="mref-name">return positivo</span><span class="mref-desc">El primero va DESPUÉS (es "mayor")</span></div>
+      </div>
+      <pre style="margin-top:10px"><span class="cm">// Enteros → diferencia directa</span>
+<span class="kw">return this</span>.edad - otro.edad;              <span class="cm">// ascendente</span>
+<span class="kw">return</span> otro.edad - <span class="kw">this</span>.edad;             <span class="cm">// descendente</span>
+
+<span class="cm">// Strings → compareTo de String</span>
+<span class="kw">return this</span>.nombre.compareTo(otro.nombre); <span class="cm">// alfabético</span>
+<span class="kw">return this</span>.DNI.compareTo(otro.DNI);
+
+<span class="cm">// Doubles → × 100 y cast a int</span>
+<span class="kw">return</span> (<span class="kw">int</span>)(<span class="num">100</span> * (<span class="kw">this</span>.precio - otro.precio));</pre>
+    </div>
+  </div>
+
+  <!-- I3 COMPARATOR -->
+  <div id="i3" class="inner-section">
+    <div class="card">
+      <div class="card-title">Comparator — criterio de orden externo (alternativo)</div>
+      <pre><span class="kw">public class</span> ComparadorEdad <span class="kw">implements</span> Comparator {
+    <span class="kw">@Override</span>
+    <span class="kw">public int</span> compare(Object o1, Object o2) {
+        Cliente c1 = (Cliente) o1;
+        Cliente c2 = (Cliente) o2;
+        <span class="kw">return</span> c1.getEdad() - c2.getEdad();   <span class="cm">// ascendente</span>
+    }
+}
+
+<span class="kw">public class</span> ComparadorNombre <span class="kw">implements</span> Comparator {
+    <span class="kw">@Override</span>
+    <span class="kw">public int</span> compare(Object o1, Object o2) {
+        Cliente c1 = (Cliente) o1;
+        Cliente c2 = (Cliente) o2;
+        <span class="kw">return</span> c1.getNombre().compareTo(c2.getNombre());
+    }
+}
+
+<span class="cm">// Uso:</span>
+Arrays.sort(clientes, <span class="kw">new</span> ComparadorEdad());           <span class="cm">// por edad asc</span>
+Arrays.sort(clientes, <span class="kw">new</span> ComparadorEdad().reversed()); <span class="cm">// por edad desc</span>
+Arrays.sort(clientes, <span class="kw">new</span> ComparadorNombre());          <span class="cm">// por nombre</span>
+Arrays.sort(clientes);                                  <span class="cm">// orden natural (compareTo)</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Comparable vs Comparator</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">Comparable (compareTo)</span><span class="mref-desc">Orden natural, dentro de la clase. Arrays.sort(arr) sin segundo parámetro.</span></div>
+        <div class="mref-row"><span class="mref-name">Comparator (compare)</span><span class="mref-desc">Orden alternativo, clase aparte. Arrays.sort(arr, comparador).</span></div>
+        <div class="mref-row"><span class="mref-name">reversed()</span><span class="mref-desc">Método de Comparator que invierte el orden. Solo en clases que implementan Comparator.</span></div>
+        <div class="mref-row"><span class="mref-name">Cuándo usar cada uno</span><span class="mref-desc">Comparable = criterio principal (ej: DNI). Comparator = criterios extra (nombre, edad, saldo…).</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- I4 ARRAYS.SORT -->
+  <div id="i4" class="inner-section">
+    <div class="card">
+      <div class="card-title">Arrays.sort — todas las formas</div>
+      <pre><span class="cm">// 1. Tipos primitivos — directo</span>
+Arrays.sort(intArray);
+
+<span class="cm">// 2. Objetos con Comparable — orden natural</span>
+Arrays.sort(clientes);
+
+<span class="cm">// 3. Objetos con Comparator externo</span>
+Arrays.sort(clientes, <span class="kw">new</span> ComparadorNombre());
+
+<span class="cm">// 4. Solo un rango del array (índices 0..n-1)</span>
+Arrays.sort(puntuaciones, <span class="num">0</span>, <span class="num">5</span>);
+
+<span class="cm">// 5. Orden inverso</span>
+Arrays.sort(clientes, <span class="kw">new</span> ComparadorEdad().reversed());
+
+<span class="cm">// Para objetos: la clase DEBE implementar Comparable</span>
+<span class="cm">// o se debe pasar un Comparator, si no → ClassCastException</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Ordenar char[] — útil para anagramas</div>
+      <pre><span class="kw">char</span>[] c1 = palabra1.toLowerCase().toCharArray();
+<span class="kw">char</span>[] c2 = palabra2.toLowerCase().toCharArray();
+Arrays.sort(c1);
+Arrays.sort(c2);
+<span class="kw">boolean</span> esAnagrama = Arrays.equals(c1, c2);</pre>
+    </div>
+  </div>
+
+  <!-- I5 EXCEPCIONES -->
+  <div id="i5" class="inner-section">
+    <div class="card">
+      <div class="card-title">Lanzar excepciones — throw</div>
+      <pre><span class="cm">// Lanzar excepción existente</span>
+<span class="kw">if</span> (edad &lt; <span class="num">0</span> || edad &gt; <span class="num">200</span>)
+    <span class="kw">throw new</span> IllegalArgumentException(<span class="str">"Edad incorrecta: "</span> + edad);
+
+<span class="cm">// Crear excepción propia</span>
+<span class="kw">public class</span> DniException <span class="kw">extends</span> IllegalArgumentException {
+    <span class="kw">public</span> DniException(String msg) { <span class="kw">super</span>(msg); }
+}
+<span class="kw">throw new</span> DniException(<span class="str">"Letra incorrecta"</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Capturar excepciones — try / catch / finally</div>
+      <pre><span class="kw">try</span> {
+    <span class="kw">int</span> edad    = Integer.parseInt(textoEdad);    <span class="cm">// NumberFormatException</span>
+    <span class="kw">double</span> saldo = Double.parseDouble(textoSaldo); <span class="cm">// NumberFormatException</span>
+    Cliente c   = <span class="kw">new</span> Cliente(dni, nombre, edad, saldo); <span class="cm">// IllegalArgumentException</span>
+} <span class="kw">catch</span> (NumberFormatException e) {
+    System.out.println(<span class="str">"Introduce un número válido"</span>);
+} <span class="kw">catch</span> (IllegalArgumentException e) {
+    System.out.println(e.getMessage());   <span class="cm">// mensaje de la excepción</span>
+} <span class="kw">finally</span> {
+    <span class="cm">// se ejecuta SIEMPRE — usar para cerrar recursos</span>
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Excepciones más comunes</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">NumberFormatException</span><span class="mref-desc">String no convertible a número. Integer.parseInt("abc")</span></div>
+        <div class="mref-row"><span class="mref-name">IllegalArgumentException</span><span class="mref-desc">Parámetro con valor incorrecto. Lanzar en constructores con validación.</span></div>
+        <div class="mref-row"><span class="mref-name">NullPointerException</span><span class="mref-desc">Llamar método sobre null. Comprobar != null antes.</span></div>
+        <div class="mref-row"><span class="mref-name">ArrayIndexOutOfBoundsException</span><span class="mref-desc">Índice fuera de rango. 0..length-1</span></div>
+        <div class="mref-row"><span class="mref-name">ClassCastException</span><span class="mref-desc">Downcast incorrecto. Comprobar con instanceof antes.</span></div>
+        <div class="mref-row"><span class="mref-name">IOException</span><span class="mref-desc">Error de fichero. Checked — obliga a try/catch.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- I6 FICHEROS -->
+  <div id="i6" class="inner-section">
+    <div class="card">
+      <div class="card-title">Leer fichero de texto — BufferedReader</div>
+      <pre><span class="kw">import</span> java.io.*;
+
+<span class="kw">try</span> {
+    BufferedReader lector = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(fichero));
+    <span class="kw">while</span> (lector.ready()) {
+        String linea  = lector.readLine();
+        String[] datos = linea.split(<span class="str">""</span> + SEPARADOR);  <span class="cm">// dividir por separador</span>
+        String dni    = datos[<span class="num">0</span>];
+        String nombre = datos[<span class="num">1</span>];
+        <span class="kw">int</span> edad      = Integer.parseInt(datos[<span class="num">2</span>]);
+        <span class="kw">double</span> saldo  = Double.parseDouble(datos[<span class="num">3</span>]);
+    }
+    lector.close();                     <span class="cm">// cerrar SIEMPRE</span>
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Escribir fichero de texto — BufferedWriter</div>
+      <pre><span class="kw">private static final char</span> SEPARADOR = <span class="str">'|'</span>;
+
+<span class="kw">try</span> {
+    BufferedWriter escritor = <span class="kw">new</span> BufferedWriter(<span class="kw">new</span> FileWriter(fichero));
+    <span class="kw">for</span> (Cliente c : clientes) {
+        escritor.write(c.getDNI()    + SEPARADOR
+                     + c.getNombre() + SEPARADOR
+                     + c.getEdad()   + SEPARADOR
+                     + c.getSaldo());
+        escritor.newLine();           <span class="cm">// salto de línea</span>
+    }
+    escritor.close();                 <span class="cm">// cerrar SIEMPRE</span>
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Ajustar texto a columna fija — String.repeat()</div>
+      <pre><span class="cm">// Alineación izquierda (rellena espacios a la derecha)</span>
+<span class="kw">public</span> String ajustar(String s, <span class="kw">int</span> lon) {
+    <span class="kw">if</span> (s.length() &gt; lon) s = s.substring(<span class="num">0</span>, lon);
+    <span class="kw">return</span> s + <span class="str">" "</span>.repeat(lon - s.length());
+}
+
+<span class="cm">// Alineación derecha (rellena espacios a la izquierda)</span>
+<span class="kw">public</span> String ajustarDerecha(String s, <span class="kw">int</span> lon) {
+    <span class="kw">if</span> (s.length() &gt; lon) s = s.substring(<span class="num">0</span>, lon);
+    <span class="kw">return</span> <span class="str">" "</span>.repeat(lon - s.length()) + s;
+}
+
+<span class="cm">// Uso para tablas de texto:</span>
+area.append(ajustar(c.getDNI(), <span class="num">10</span>) + <span class="str">" "</span>
+          + ajustar(c.getNombre(), <span class="num">25</span>) + <span class="str">"\n"</span>);</pre>
+    </div>
+  </div>
+
+  <!-- I7 ERRORES COMUNES -->
+  <div id="i7" class="inner-section">
+    <div class="card">
+      <div class="card-title">No implementar todos los métodos de la interface</div>
+      <pre><span class="cm">// ERROR — falta vacia()</span>
+<span class="kw">public class</span> MiPila <span class="kw">implements</span> Pila {
+    <span class="kw">public void</span> apilar(Integer n) { ... }
+    <span class="kw">public</span> Integer desapilar()    { ... }
+    <span class="cm">// vacia() no implementada → error de compilación</span>
+}</pre>
+      <div class="err">Debes implementar TODOS los métodos de la interface o declarar la clase <code>abstract</code>.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">compareTo con doubles sin ×100</div>
+      <pre><span class="cm">// INCORRECTO — 1.5 - 1.3 = 0.2 → cast a int = 0 (siempre iguales)</span>
+<span class="kw">return</span> (<span class="kw">int</span>)(precio - otro.precio);
+
+<span class="cm">// CORRECTO</span>
+<span class="kw">return</span> (<span class="kw">int</span>)(<span class="num">100</span> * (precio - otro.precio));</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">split con separador "|" sin escapar</div>
+      <pre><span class="cm">// INCORRECTO — | es especial en regex, divide cada carácter</span>
+linea.split(<span class="str">"|"</span>);
+
+<span class="cm">// CORRECTO — escapar con \\</span>
+linea.split(<span class="str">"\\|"</span>);
+
+<span class="cm">// O usar "" + charSeparador (evita el problema)</span>
+<span class="kw">private static final char</span> SEP = <span class="str">'|'</span>;
+linea.split(<span class="str">""</span> + SEP);   <span class="cm">// Java lo trata como literal</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Arrays.sort sin Comparable ni Comparator</div>
+      <pre><span class="cm">// ERROR en tiempo de ejecución → ClassCastException</span>
+Arrays.sort(misObjetos);   <span class="cm">// la clase no implementa Comparable</span>
+
+<span class="cm">// Solución A: implementar Comparable en la clase</span>
+<span class="kw">public class</span> MiClase <span class="kw">implements</span> Comparable { ... }
+
+<span class="cm">// Solución B: pasar Comparator</span>
+Arrays.sort(misObjetos, <span class="kw">new</span> MiComparador());</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Olvidar cerrar el fichero</div>
+      <pre><span class="cm">// Siempre cerrar en finally para garantizarlo</span>
+BufferedReader r = <span class="kw">null</span>;
+<span class="kw">try</span> {
+    r = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(f));
+    <span class="kw">while</span> (r.ready()) { ... }
+} <span class="kw">catch</span> (IOException e) { ... }
+<span class="kw">finally</span> {
+    <span class="kw">if</span> (r != <span class="kw">null</span>) r.close();
+}</pre>
+    </div>
+  </div>
+
+</div><!-- /interfaces -->
+
+
+<!-- ══════════════════════════════════════════════
+     TOPIC: FICHEROS / EXCEPCIONES
+══════════════════════════════════════════════ -->
+<div id="ficheros" class="topic-section">
+  <div class="inner-nav">
+    <button class="inner-btn on" onclick="showInner('ficheros','f1',this)">Clases de fichero</button>
+    <button class="inner-btn"   onclick="showInner('ficheros','f2',this)">Leer</button>
+    <button class="inner-btn"   onclick="showInner('ficheros','f3',this)">Escribir</button>
+    <button class="inner-btn"   onclick="showInner('ficheros','f4',this)">Patrones</button>
+    <button class="inner-btn"   onclick="showInner('ficheros','f5',this)">Excepciones E/S</button>
+    <button class="inner-btn"   onclick="showInner('ficheros','f6',this)">Errores comunes</button>
+  </div>
+
+  <!-- F1 CLASES -->
+  <div id="f1" class="inner-section on">
+    <div class="card">
+      <div class="card-title">Jerarquía de clases — cuándo usar cada una</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">FileReader(ruta)</span><span class="mref-desc">Leer carácter a carácter. Sin buffer. Más lento pero más sencillo.</span></div>
+        <div class="mref-row"><span class="mref-name">FileWriter(ruta)</span><span class="mref-desc">Escribir carácter a carácter. Sin buffer. Sobrescribe por defecto.</span></div>
+        <div class="mref-row"><span class="mref-name">FileWriter(ruta, true)</span><span class="mref-desc">Escribir añadiendo al final (append). El segundo parámetro true es clave.</span></div>
+        <div class="mref-row"><span class="mref-name">BufferedReader(fileReader)</span><span class="mref-desc">Leer línea a línea con readLine(). Más eficiente. Ideal para texto.</span></div>
+        <div class="mref-row"><span class="mref-name">BufferedWriter(fileWriter)</span><span class="mref-desc">Escribir líneas con newLine(). Más eficiente. Ideal para texto.</span></div>
+        <div class="mref-row"><span class="mref-name">File(ruta)</span><span class="mref-desc">Objeto que representa la ruta. No lee ni escribe. Útil para getName(), exists()…</span></div>
+      </div>
+      <pre style="margin-top:10px"><span class="kw">import</span> java.io.FileReader;
+<span class="kw">import</span> java.io.FileWriter;
+<span class="kw">import</span> java.io.BufferedReader;
+<span class="kw">import</span> java.io.BufferedWriter;
+<span class="kw">import</span> java.io.File;
+<span class="kw">import</span> java.io.IOException;
+<span class="kw">import</span> java.io.FileNotFoundException;
+
+<span class="cm">// Regla rápida:
+// ¿Leer líneas? → BufferedReader
+// ¿Leer char a char? → FileReader
+// ¿Escribir líneas? → BufferedWriter
+// ¿Escribir char a char? → FileWriter</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Métodos principales — referencia rápida</div>
+      <table class="stbl">
+        <thead><tr><th>Clase</th><th>Método</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td>FileReader / BufferedReader</td><td>ready()</td><td>¿Hay más datos? Usar en while</td></tr>
+          <tr><td>FileReader</td><td>read()</td><td>Lee un char como int → cast a (char)</td></tr>
+          <tr><td>BufferedReader</td><td>readLine()</td><td>Lee una línea completa como String. Devuelve null al acabar</td></tr>
+          <tr><td>FileWriter / BufferedWriter</td><td>write(char/String)</td><td>Escribe un carácter o texto</td></tr>
+          <tr><td>BufferedWriter</td><td>newLine()</td><td>Inserta salto de línea (portable)</td></tr>
+          <tr><td>Todos</td><td>close()</td><td>Cierra el fichero. OBLIGATORIO siempre</td></tr>
+          <tr><td>File</td><td>getName()</td><td>Solo el nombre del fichero sin ruta</td></tr>
+          <tr><td>File</td><td>exists()</td><td>¿Existe el fichero? → boolean</td></tr>
+          <tr><td>File</td><td>getPath()</td><td>Ruta completa como String</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- F2 LEER -->
+  <div id="f2" class="inner-section">
+    <div class="card">
+      <div class="card-title">Leer char a char — FileReader</div>
+      <span class="badge bp">Útil para procesar carácter a carácter</span>
+      <pre><span class="kw">try</span> {
+    FileReader fichero = <span class="kw">new</span> FileReader(<span class="str">"datos.txt"</span>);
+    <span class="kw">while</span> (fichero.ready()) {
+        <span class="kw">char</span> c = (<span class="kw">char</span>) fichero.read();  <span class="cm">// read() devuelve int, cast a char</span>
+        System.out.print(c);
+    }
+    fichero.close();
+} <span class="kw">catch</span> (FileNotFoundException e) {
+    System.out.println(<span class="str">"Fichero no encontrado: "</span> + e.getMessage());
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error de lectura: "</span> + e.getMessage());
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Leer línea a línea — BufferedReader</div>
+      <span class="badge bt">El más habitual para ficheros de texto</span>
+      <pre><span class="kw">try</span> {
+    BufferedReader lector = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(<span class="str">"datos.txt"</span>));
+    <span class="kw">while</span> (lector.ready()) {
+        String linea = lector.readLine();   <span class="cm">// lee una línea completa</span>
+        System.out.println(linea);
+    }
+    lector.close();
+} <span class="kw">catch</span> (FileNotFoundException e) {
+    System.out.println(<span class="str">"Fichero no encontrado"</span>);
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Leer y parsear líneas — números en fichero</div>
+      <pre><span class="kw">int</span> max = Integer.MIN_VALUE;
+<span class="kw">int</span> min = Integer.MAX_VALUE;
+
+BufferedReader lector = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(<span class="str">"numeros.txt"</span>));
+<span class="kw">while</span> (lector.ready()) {
+    String linea = lector.readLine();
+    <span class="kw">try</span> {
+        <span class="kw">int</span> n = Integer.parseInt(linea);    <span class="cm">// convertir línea a número</span>
+        <span class="kw">if</span> (n &gt; max) max = n;
+        <span class="kw">if</span> (n &lt; min) min = n;
+    } <span class="kw">catch</span> (NumberFormatException e) {
+        <span class="cm">// línea no numérica → ignorar y continuar</span>
+    }
+}
+lector.close();</pre>
+      <div class="tip">Anidar try/catch dentro del bucle permite ignorar líneas inválidas sin parar la lectura.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Leer con paginación (pausa cada N líneas)</div>
+      <pre>BufferedReader f = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(ruta));
+<span class="kw">int</span> contador = <span class="num">0</span>;
+<span class="kw">while</span> (f.ready()) {
+    String linea = f.readLine();
+    System.out.println(linea);
+    contador++;
+    <span class="kw">if</span> (contador == <span class="num">24</span>) {    <span class="cm">// pausa cada 24 líneas</span>
+        sc.nextLine();          <span class="cm">// espera ENTER del usuario</span>
+        contador = <span class="num">0</span>;
+    }
+}
+f.close();</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Ruta desde argumentos de main o teclado</div>
+      <pre><span class="cm">// Los argumentos de línea de comandos llegan en args[]</span>
+<span class="kw">public static void</span> main(String[] args) {
+    String ruta;
+    <span class="kw">if</span> (args.length == <span class="num">1</span>) {
+        ruta = args[<span class="num">0</span>];          <span class="cm">// ruta dada como argumento</span>
+    } <span class="kw">else</span> {
+        ruta = sc.nextLine();    <span class="cm">// pedir por teclado</span>
+    }
+}
+
+<span class="cm">// Ruta por defecto si el usuario no introduce nada</span>
+<span class="kw">if</span> (ruta.isBlank()) ruta = <span class="str">"prueba.txt"</span>;</pre>
+    </div>
+  </div>
+
+  <!-- F3 ESCRIBIR -->
+  <div id="f3" class="inner-section">
+    <div class="card">
+      <div class="card-title">Escribir char a char — FileWriter</div>
+      <pre><span class="kw">try</span> {
+    FileWriter fichero = <span class="kw">new</span> FileWriter(<span class="str">"salida.txt"</span>); <span class="cm">// sobrescribe</span>
+    String texto = <span class="str">"Hola mundo"</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;texto.length(); i++) {
+        fichero.write(texto.charAt(i));
+    }
+    fichero.close();
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Escribir líneas — BufferedWriter</div>
+      <pre><span class="kw">try</span> {
+    <span class="cm">// false (por defecto) → sobrescribe el fichero</span>
+    BufferedWriter escritor = <span class="kw">new</span> BufferedWriter(<span class="kw">new</span> FileWriter(<span class="str">"salida.txt"</span>));
+    escritor.write(<span class="str">"Primera línea"</span>);
+    escritor.newLine();                         <span class="cm">// salto de línea</span>
+    escritor.write(<span class="str">"Segunda línea"</span>);
+    escritor.newLine();
+    escritor.close();
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}
+
+<span class="cm">// true → añade al final (APPEND) sin borrar lo anterior</span>
+BufferedWriter escritor = <span class="kw">new</span> BufferedWriter(<span class="kw">new</span> FileWriter(<span class="str">"firmas.txt"</span>, <span class="kw">true</span>));
+escritor.write(nuevoNombre);
+escritor.newLine();
+escritor.close();</pre>
+      <div class="warn">⚠ Sin el segundo parámetro <code>true</code>, cada vez que abres el fichero para escribir, se borra el contenido anterior.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Copiar un fichero</div>
+      <pre><span class="kw">try</span> {
+    File f = <span class="kw">new</span> File(ruta);
+    FileReader  lector   = <span class="kw">new</span> FileReader(ruta);
+    FileWriter  escritor = <span class="kw">new</span> FileWriter(<span class="str">"copia_de_"</span> + f.getName());
+    <span class="kw">while</span> (lector.ready()) {
+        <span class="kw">char</span> c = (<span class="kw">char</span>) lector.read();
+        escritor.write(c);
+    }
+    escritor.close();
+    lector.close();
+} <span class="kw">catch</span> (FileNotFoundException e) {
+    System.out.println(<span class="str">"Fichero no encontrado"</span>);
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}
+
+<span class="cm">// f.getName() → devuelve solo "datos.txt" de "C:/ruta/datos.txt"</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Fusionar dos ficheros ordenados</div>
+      <pre>BufferedReader f1 = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(<span class="str">"a.txt"</span>));
+BufferedReader f2 = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(<span class="str">"b.txt"</span>));
+BufferedWriter fw = <span class="kw">new</span> BufferedWriter(<span class="kw">new</span> FileWriter(<span class="str">"todos.txt"</span>));
+
+String l1 = f1.readLine();
+String l2 = f2.readLine();
+
+<span class="kw">while</span> (l1 != <span class="kw">null</span> && l2 != <span class="kw">null</span>) {
+    <span class="kw">if</span> (l1.compareTo(l2) &lt; <span class="num">0</span>) { fw.write(l1); fw.newLine(); l1=f1.readLine(); }
+    <span class="kw">else</span>                        { fw.write(l2); fw.newLine(); l2=f2.readLine(); }
+}
+<span class="cm">// Volcar el resto del fichero que no se ha agotado</span>
+<span class="kw">while</span> (l1 != <span class="kw">null</span>) { fw.write(l1); fw.newLine(); l1=f1.readLine(); }
+<span class="kw">while</span> (l2 != <span class="kw">null</span>) { fw.write(l2); fw.newLine(); l2=f2.readLine(); }
+
+fw.close(); f1.close(); f2.close();</pre>
+      <div class="tip">Con <code>readLine()</code>, al llegar al final del fichero devuelve <code>null</code> en lugar de lanzar excepción. Comprueba <code>!= null</code> en vez de <code>ready()</code>.</div>
+    </div>
+  </div>
+
+  <!-- F4 PATRONES -->
+  <div id="f4" class="inner-section">
+    <div class="card">
+      <div class="card-title">Leer CSV / campos separados por carácter</div>
+      <pre><span class="kw">private static final char</span> SEP = <span class="str">'|'</span>;  <span class="cm">// o ',' o ';'</span>
+
+BufferedReader lector = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(<span class="str">"clientes.txt"</span>));
+<span class="kw">while</span> (lector.ready()) {
+    String linea   = lector.readLine();
+    String[] datos = linea.split(<span class="str">""</span> + SEP);  <span class="cm">// split por el separador</span>
+    String dni     = datos[<span class="num">0</span>];
+    String nombre  = datos[<span class="num">1</span>];
+    <span class="kw">int</span> edad       = Integer.parseInt(datos[<span class="num">2</span>]);
+    <span class="kw">double</span> saldo   = Double.parseDouble(datos[<span class="num">3</span>]);
+    clientes = Arrays.copyOf(clientes, clientes.length + <span class="num">1</span>);
+    clientes[clientes.length - <span class="num">1</span>] = <span class="kw">new</span> Cliente(dni, nombre, edad, saldo);
+}
+lector.close();</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Escribir CSV</div>
+      <pre>BufferedWriter escritor = <span class="kw">new</span> BufferedWriter(<span class="kw">new</span> FileWriter(<span class="str">"clientes.txt"</span>));
+<span class="kw">for</span> (Cliente c : clientes) {
+    escritor.write(c.getDNI()    + SEP
+                 + c.getNombre() + SEP
+                 + c.getEdad()   + SEP
+                 + c.getSaldo());
+    escritor.newLine();
+}
+escritor.close();</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Comprobar si una línea ya existe antes de insertar</div>
+      <pre><span class="cm">// Leer el fichero primero para comprobar duplicados</span>
+<span class="kw">boolean</span> existe = <span class="kw">false</span>;
+<span class="kw">try</span> {
+    BufferedReader lector = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(FICHERO));
+    <span class="kw">while</span> (lector.ready()) {
+        <span class="kw">if</span> (lector.readLine().equals(nuevoNombre)) existe = <span class="kw">true</span>;
+    }
+    lector.close();
+} <span class="kw">catch</span> (FileNotFoundException e) {
+    <span class="cm">// el fichero aún no existe → no hay duplicados, continuar</span>
+}
+
+<span class="kw">if</span> (!existe) {
+    BufferedWriter w = <span class="kw">new</span> BufferedWriter(<span class="kw">new</span> FileWriter(FICHERO, <span class="kw">true</span>));
+    w.write(nuevoNombre); w.newLine(); w.close();
+}</pre>
+      <div class="tip">Capturar <code>FileNotFoundException</code> vacío es válido cuando el fichero puede no existir todavía (primera ejecución).</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Leer fichero de claves/tabla de codificación</div>
+      <pre><span class="kw">char</span>[] codigo = <span class="kw">new char</span>[<span class="num">10</span>];
+FileReader codec = <span class="kw">new</span> FileReader(<span class="str">"codec.txt"</span>);
+<span class="kw">int</span> i = <span class="num">0</span>;
+<span class="kw">while</span> (codec.ready()) {
+    codigo[i] = (<span class="kw">char</span>) codec.read();
+    i++;
+}
+codec.close();
+
+<span class="cm">// Ahora usar codigo[] como tabla de sustitución</span>
+FileReader entrada = <span class="kw">new</span> FileReader(<span class="str">"codificado.txt"</span>);
+FileWriter salida  = <span class="kw">new</span> FileWriter(<span class="str">"descifrado.txt"</span>);
+<span class="kw">while</span> (entrada.ready()) {
+    <span class="kw">char</span> c = (<span class="kw">char</span>) entrada.read();
+    <span class="cm">// buscar c en codigo[] y sustituir...</span>
+    salida.write(c);
+}
+salida.close(); entrada.close();</pre>
+    </div>
+  </div>
+
+  <!-- F5 EXCEPCIONES E/S -->
+  <div id="f5" class="inner-section">
+    <div class="card">
+      <div class="card-title">Jerarquía de excepciones de E/S</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">IOException</span><span class="mref-desc">Padre de todas las excepciones de E/S. Checked — obliga a try/catch o throws.</span></div>
+        <div class="mref-row"><span class="mref-name">FileNotFoundException</span><span class="mref-desc">El fichero no existe o no se puede abrir. Subclase de IOException.</span></div>
+        <div class="mref-row"><span class="mref-name">NumberFormatException</span><span class="mref-desc">Línea que no se puede parsear a número. Subclase de RuntimeException (no checked).</span></div>
+        <div class="mref-row"><span class="mref-name">InputMismatchException</span><span class="mref-desc">Scanner recibe tipo incorrecto (ej: texto cuando espera int).</span></div>
+      </div>
+      <pre style="margin-top:10px"><span class="cm">// Capturar desde más específica a más general</span>
+<span class="kw">try</span> { ... }
+<span class="kw">catch</span> (FileNotFoundException e) { <span class="cm">/* fichero no existe */</span> }
+<span class="kw">catch</span> (IOException e)           { <span class="cm">/* otro error de E/S */</span> }
+<span class="cm">// FileNotFoundException ANTES de IOException (es subclase)</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">throws en la firma del método</div>
+      <pre><span class="cm">// Si no quieres capturar la excepción, la delegas al llamador</span>
+<span class="kw">public static void</span> leerFichero(String ruta) <span class="kw">throws</span> IOException {
+    FileReader f = <span class="kw">new</span> FileReader(ruta);
+    <span class="cm">// ... sin try/catch aquí</span>
+}
+
+<span class="cm">// El llamador tendrá que capturarla</span>
+<span class="kw">try</span> {
+    leerFichero(<span class="str">"datos.txt"</span>);
+} <span class="kw">catch</span> (IOException e) { ... }
+
+<span class="cm">// throws múltiples</span>
+<span class="kw">public static void</span> procesar() <span class="kw">throws</span> IOException, FileNotFoundException { ... }</pre>
+      <div class="warn"><code>throws</code> en la firma no captura la excepción, solo la propaga. <code>throw</code> (sin s) es quien lanza la excepción.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">try / catch / finally — flujo de ejecución</div>
+      <pre><span class="kw">try</span> {
+    <span class="cm">// código que puede lanzar excepción</span>
+    FileReader f = <span class="kw">new</span> FileReader(<span class="str">"datos.txt"</span>);
+    <span class="cm">// ... leer ...</span>
+    f.close();
+} <span class="kw">catch</span> (FileNotFoundException e) {
+    <span class="cm">// se ejecuta SOLO si la excepción es FileNotFoundException</span>
+    System.out.println(<span class="str">"No existe el fichero"</span>);
+} <span class="kw">catch</span> (IOException e) {
+    <span class="cm">// se ejecuta SOLO si hay otro error de E/S</span>
+    System.out.println(<span class="str">"Error leyendo"</span>);
+} <span class="kw">finally</span> {
+    <span class="cm">// se ejecuta SIEMPRE — haya o no excepción</span>
+    <span class="cm">// ideal para cerrar ficheros</span>
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">System.exit() — salir del programa con código</div>
+      <pre><span class="kw">catch</span> (IOException e) {
+    System.err.println(<span class="str">"Error fatal: "</span> + e.getMessage());
+    System.exit(<span class="num">2</span>);   <span class="cm">// sale del programa con código de error 2</span>
+}
+<span class="cm">// System.exit(0) → salida normal
+// System.exit(n≠0) → salida con error
+// System.err.println → imprime en la salida de error (stderr)</span></pre>
+    </div>
+  </div>
+
+  <!-- F6 ERRORES COMUNES -->
+  <div id="f6" class="inner-section">
+    <div class="card">
+      <div class="card-title">Olvidar cerrar el fichero</div>
+      <pre><span class="cm">// Si hay excepción, close() nunca se alcanza</span>
+FileReader f = <span class="kw">new</span> FileReader(<span class="str">"datos.txt"</span>);
+<span class="kw">while</span> (f.ready()) { ... }
+f.close();  <span class="cm">// no llega aquí si hay excepción antes</span>
+
+<span class="cm">// Solución: close() en finally</span>
+FileReader f = <span class="kw">null</span>;
+<span class="kw">try</span> {
+    f = <span class="kw">new</span> FileReader(<span class="str">"datos.txt"</span>);
+    <span class="kw">while</span> (f.ready()) { ... }
+} <span class="kw">catch</span> (IOException e) { ... }
+<span class="kw">finally</span> { <span class="kw">if</span> (f != <span class="kw">null</span>) f.close(); }</pre>
+      <div class="err">Un fichero no cerrado puede quedarse bloqueado o perder los últimos bytes escritos (el buffer no se vuelca).</div>
+    </div>
+    <div class="card">
+      <div class="card-title">FileWriter sin true → borra el fichero cada vez</div>
+      <pre><span class="cm">// INCORRECTO si quieres añadir al final</span>
+BufferedWriter w = <span class="kw">new</span> BufferedWriter(<span class="kw">new</span> FileWriter(<span class="str">"firmas.txt"</span>));
+<span class="cm">// Cada vez que se ejecuta, borra todo el contenido anterior</span>
+
+<span class="cm">// CORRECTO — modo append</span>
+BufferedWriter w = <span class="kw">new</span> BufferedWriter(<span class="kw">new</span> FileWriter(<span class="str">"firmas.txt"</span>, <span class="kw">true</span>));</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">ready() vs readLine() != null</div>
+      <pre><span class="cm">// ready() puede fallar con la última línea en algunos sistemas</span>
+<span class="kw">while</span> (lector.ready()) { ... }
+
+<span class="cm">// Más robusto: usar readLine() y comprobar null</span>
+String linea;
+<span class="kw">while</span> ((linea = lector.readLine()) != <span class="kw">null</span>) {
+    <span class="cm">// procesar linea</span>
+}</pre>
+      <div class="tip">Para fusionar ficheros o cuando el final del fichero importa, usa <code>readLine() != null</code>. Para lectura simple, <code>ready()</code> es suficiente.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Capturar IOException antes que FileNotFoundException</div>
+      <pre><span class="cm">// INCORRECTO — FileNotFoundException nunca se alcanza</span>
+<span class="kw">catch</span> (IOException e)           { ... }
+<span class="kw">catch</span> (FileNotFoundException e) { ... }  <span class="cm">// ERROR de compilación</span>
+
+<span class="cm">// CORRECTO — más específica primero</span>
+<span class="kw">catch</span> (FileNotFoundException e) { ... }  <span class="cm">// subclase primero</span>
+<span class="kw">catch</span> (IOException e)           { ... }  <span class="cm">// superclase después</span></pre>
+      <div class="err">Siempre captura las excepciones más específicas (subclases) antes que las generales (superclases).</div>
+    </div>
+    <div class="card">
+      <div class="card-title">read() devuelve int, no char</div>
+      <pre><span class="cm">// INCORRECTO — asignar directamente a char sin cast</span>
+<span class="kw">char</span> c = fichero.read();   <span class="cm">// ERROR de compilación (int → char necesita cast)</span>
+
+<span class="cm">// CORRECTO — cast explícito</span>
+<span class="kw">char</span> c = (<span class="kw">char</span>) fichero.read();
+
+<span class="cm">// read() devuelve -1 al llegar al final (como int)</span>
+<span class="kw">int</span> dato = fichero.read();
+<span class="kw">if</span> (dato == -<span class="num">1</span>) <span class="cm">// fin de fichero</span></pre>
+    </div>
+  </div>
+
+</div><!-- /ficheros -->
+
+
+<!-- ══════════════════════════════════════════════
+     TOPIC: FICHEROS BINARIOS
+══════════════════════════════════════════════ -->
+<div id="binarios" class="topic-section">
+  <div class="inner-nav">
+    <button class="inner-btn on" onclick="showInner('binarios','b1',this)">Clases</button>
+    <button class="inner-btn"   onclick="showInner('binarios','b2',this)">Escribir</button>
+    <button class="inner-btn"   onclick="showInner('binarios','b3',this)">Leer</button>
+    <button class="inner-btn"   onclick="showInner('binarios','b4',this)">Objetos / arrays</button>
+    <button class="inner-btn"   onclick="showInner('binarios','b5',this)">Bytes / URL</button>
+    <button class="inner-btn"   onclick="showInner('binarios','b6',this)">Texto vs Binario</button>
+    <button class="inner-btn"   onclick="showInner('binarios','b7',this)">Errores comunes</button>
+  </div>
+
+  <!-- B1 CLASES -->
+  <div id="b1" class="inner-section on">
+    <div class="card">
+      <div class="card-title">Clases para ficheros binarios — cuándo usar cada una</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">ObjectOutputStream</span><span class="mref-desc">Escribir objetos, primitivos y arrays en binario. Envuelve a FileOutputStream.</span></div>
+        <div class="mref-row"><span class="mref-name">ObjectInputStream</span><span class="mref-desc">Leer lo que escribió ObjectOutputStream. Envuelve a FileInputStream.</span></div>
+        <div class="mref-row"><span class="mref-name">FileOutputStream</span><span class="mref-desc">Escribir bytes crudos. Base de ObjectOutputStream.</span></div>
+        <div class="mref-row"><span class="mref-name">FileInputStream</span><span class="mref-desc">Leer bytes crudos. Base de ObjectInputStream. Usa available() para saber si quedan bytes.</span></div>
+      </div>
+      <pre style="margin-top:10px"><span class="kw">import</span> java.io.ObjectOutputStream;
+<span class="kw">import</span> java.io.ObjectInputStream;
+<span class="kw">import</span> java.io.FileOutputStream;
+<span class="kw">import</span> java.io.FileInputStream;
+<span class="kw">import</span> java.io.IOException;</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Métodos de escritura — ObjectOutputStream</div>
+      <table class="stbl">
+        <thead><tr><th>Método</th><th>Escribe</th></tr></thead>
+        <tbody>
+          <tr><td>writeInt(int)</td><td>Entero (4 bytes)</td></tr>
+          <tr><td>writeDouble(double)</td><td>Real (8 bytes)</td></tr>
+          <tr><td>writeBoolean(boolean)</td><td>Booleano (1 byte)</td></tr>
+          <tr><td>writeChar(char)</td><td>Carácter (2 bytes)</td></tr>
+          <tr><td>writeUTF(String)</td><td>String en formato UTF-8</td></tr>
+          <tr><td>writeObject(Object)</td><td>Objeto completo (clase debe ser Serializable)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Métodos de lectura — ObjectInputStream</div>
+      <table class="stbl">
+        <thead><tr><th>Método</th><th>Lee</th><th>Nota</th></tr></thead>
+        <tbody>
+          <tr><td>readInt()</td><td>int</td><td>Debe haber un writeInt() correspondiente</td></tr>
+          <tr><td>readDouble()</td><td>double</td><td>Lanza EOFException al acabar</td></tr>
+          <tr><td>readBoolean()</td><td>boolean</td><td></td></tr>
+          <tr><td>readChar()</td><td>char</td><td></td></tr>
+          <tr><td>readUTF()</td><td>String</td><td>Corresponde a writeUTF()</td></tr>
+          <tr><td>readObject()</td><td>Object</td><td>Requiere cast + throws ClassNotFoundException</td></tr>
+          <tr><td>available()</td><td>int</td><td>Bytes restantes. > 0 para saber si hay más datos</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- B2 ESCRIBIR -->
+  <div id="b2" class="inner-section">
+    <div class="card">
+      <div class="card-title">Escribir primitivos — patrón básico</div>
+      <pre><span class="kw">try</span> {
+    ObjectOutputStream salida = <span class="kw">new</span> ObjectOutputStream(
+                                    <span class="kw">new</span> FileOutputStream(<span class="str">"datos.dat"</span>));
+    salida.writeDouble(<span class="num">3.14</span>);
+    salida.writeInt(<span class="num">42</span>);
+    salida.writeUTF(<span class="str">"Hola"</span>);      <span class="cm">// String</span>
+    salida.close();               <span class="cm">// OBLIGATORIO — vuelca el buffer</span>
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}</pre>
+      <div class="warn">Si no llamas a <code>close()</code>, los últimos datos del buffer pueden no escribirse en el fichero.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Escribir varios valores en bucle</div>
+      <pre><span class="kw">try</span> {
+    ObjectOutputStream escribir = <span class="kw">new</span> ObjectOutputStream(
+                                      <span class="kw">new</span> FileOutputStream(<span class="str">"numeros.dat"</span>));
+    <span class="kw">int</span> numero = sc.nextInt();
+    <span class="kw">while</span> (numero != -<span class="num">1</span>) {
+        escribir.writeInt(numero);
+        numero = sc.nextInt();
+    }
+    escribir.close();
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}
+
+<span class="cm">// Crear ObjectOutputStream UNA SOLA VEZ fuera del bucle</span>
+<span class="cm">// Si lo creas dentro del bucle, cada new sobreescribe la cabecera</span></pre>
+      <div class="err">El <code>ObjectOutputStream</code> debe crearse UNA VEZ antes del bucle. Crearlo dentro del bucle corrompe el fichero.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Escribir un array u objeto entero</div>
+      <pre><span class="kw">double</span>[] numeros = {<span class="num">1.1</span>, <span class="num">2.2</span>, <span class="num">3.3</span>};
+
+<span class="kw">try</span> {
+    ObjectOutputStream oos = <span class="kw">new</span> ObjectOutputStream(
+                                 <span class="kw">new</span> FileOutputStream(<span class="str">"numeros.dat"</span>));
+    oos.writeObject(numeros);   <span class="cm">// guarda el array entero de golpe</span>
+    oos.close();
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}
+
+<span class="cm">// También funciona para String:</span>
+oos.writeObject(<span class="str">"Mi frase completa"</span>);</pre>
+    </div>
+  </div>
+
+  <!-- B3 LEER -->
+  <div id="b3" class="inner-section">
+    <div class="card">
+      <div class="card-title">Leer primitivos</div>
+      <pre><span class="kw">try</span> {
+    ObjectInputStream entrada = <span class="kw">new</span> ObjectInputStream(
+                                    <span class="kw">new</span> FileInputStream(<span class="str">"datos.dat"</span>));
+    <span class="kw">double</span> d = entrada.readDouble();
+    <span class="kw">int</span>    n = entrada.readInt();
+    String s = entrada.readUTF();
+    entrada.close();
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}
+
+<span class="cm">// Los tipos deben leerse EN EL MISMO ORDEN en que se escribieron</span></pre>
+      <div class="tip">El orden de lectura debe ser idéntico al de escritura. Si escribiste double, int, String → debes leer double, int, String.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Leer varios valores en bucle — available()</div>
+      <pre><span class="kw">try</span> {
+    ObjectInputStream entrada = <span class="kw">new</span> ObjectInputStream(
+                                    <span class="kw">new</span> FileInputStream(<span class="str">"numeros.dat"</span>));
+    <span class="kw">while</span> (entrada.available() &gt; <span class="num">0</span>) {   <span class="cm">// mientras queden bytes</span>
+        System.out.println(entrada.readInt());
+    }
+    entrada.close();
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}
+
+<span class="cm">// available() devuelve los bytes restantes estimados</span>
+<span class="cm">// Para objetos serializados es más fiable usar EOFException</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Leer con EOFException — más robusto para primitivos</div>
+      <pre><span class="kw">try</span> {
+    ObjectInputStream entrada = <span class="kw">new</span> ObjectInputStream(
+                                    <span class="kw">new</span> FileInputStream(<span class="str">"numeros.dat"</span>));
+    <span class="kw">try</span> {
+        <span class="kw">while</span> (<span class="kw">true</span>) {                   <span class="cm">// bucle infinito</span>
+            System.out.println(entrada.readInt());
+        }
+    } <span class="kw">catch</span> (java.io.EOFException e) {
+        <span class="cm">// fin de fichero → salir del bucle normalmente</span>
+    }
+    entrada.close();
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}</pre>
+      <div class="tip"><code>EOFException</code> es la forma más limpia de detectar el final en ficheros de primitivos escritos con <code>writeInt</code>, <code>writeDouble</code>, etc.</div>
+    </div>
+  </div>
+
+  <!-- B4 OBJETOS / ARRAYS -->
+  <div id="b4" class="inner-section">
+    <div class="card">
+      <div class="card-title">Serializable — requisito para writeObject</div>
+      <pre><span class="kw">import</span> java.io.Serializable;
+
+<span class="cm">// La clase DEBE implementar Serializable para poder guardarse con writeObject</span>
+<span class="kw">public class</span> Cliente <span class="kw">implements</span> Serializable {
+    <span class="kw">private</span> String nombre;
+    <span class="kw">private double</span> saldo;
+    <span class="cm">// ... constructores, getters, etc.</span>
+}
+
+<span class="cm">// Los arrays de tipos primitivos (double[], int[]...) ya son Serializable</span>
+<span class="cm">// Los arrays de objetos también, si el objeto implementa Serializable</span></pre>
+      <div class="err">Si intentas hacer <code>writeObject()</code> con un objeto que no implementa <code>Serializable</code> → <code>NotSerializableException</code> en tiempo de ejecución.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Escribir y leer un array entero</div>
+      <pre><span class="cm">// Escribir array de golpe</span>
+<span class="kw">double</span>[] nums = {<span class="num">1.5</span>, <span class="num">2.7</span>, <span class="num">3.14</span>};
+ObjectOutputStream oos = <span class="kw">new</span> ObjectOutputStream(<span class="kw">new</span> FileOutputStream(<span class="str">"arr.dat"</span>));
+oos.writeObject(nums);
+oos.close();
+
+<span class="cm">// Leer array — requiere cast y throws ClassNotFoundException</span>
+ObjectInputStream ois = <span class="kw">new</span> ObjectInputStream(<span class="kw">new</span> FileInputStream(<span class="str">"arr.dat"</span>));
+<span class="kw">double</span>[] recuperado = (<span class="kw">double</span>[]) ois.readObject();  <span class="cm">// cast obligatorio</span>
+ois.close();
+System.out.println(Arrays.toString(recuperado));</pre>
+      <div class="warn"><code>readObject()</code> lanza <code>ClassNotFoundException</code> además de <code>IOException</code>. El método main (o el método que lo llame) debe declarar <code>throws ClassNotFoundException</code> o capturarla.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Escribir y leer un objeto</div>
+      <pre><span class="cm">// Escribir String como objeto</span>
+ObjectOutputStream oos = <span class="kw">new</span> ObjectOutputStream(<span class="kw">new</span> FileOutputStream(<span class="str">"frase.bin"</span>));
+oos.writeObject(<span class="str">"Mi frase"</span>);
+oos.close();
+
+<span class="cm">// Leer String como objeto</span>
+ObjectInputStream ois = <span class="kw">new</span> ObjectInputStream(<span class="kw">new</span> FileInputStream(<span class="str">"frase.bin"</span>));
+String frase = (String) ois.readObject();  <span class="cm">// cast necesario</span>
+System.out.println(frase);
+ois.close();
+
+<span class="cm">// Igual con cualquier objeto Serializable:</span>
+<span class="cm">// oos.writeObject(miCliente);</span>
+<span class="cm">// Cliente c = (Cliente) ois.readObject();</span></pre>
+    </div>
+  </div>
+
+  <!-- B5 BYTES / URL -->
+  <div id="b5" class="inner-section">
+    <div class="card">
+      <div class="card-title">Copiar fichero byte a byte — FileInputStream / FileOutputStream</div>
+      <pre><span class="kw">try</span> {
+    FileInputStream  original = <span class="kw">new</span> FileInputStream(<span class="str">"origen.jpg"</span>);
+    FileOutputStream copia    = <span class="kw">new</span> FileOutputStream(<span class="str">"copia.jpg"</span>);
+
+    <span class="cm">// Opción A: byte a byte (lento)</span>
+    <span class="kw">while</span> (original.available() &gt; <span class="num">0</span>) {
+        <span class="kw">byte</span> b = (<span class="kw">byte</span>) original.read();
+        copia.write(b);
+    }
+
+    <span class="cm">// Opción B: con buffer (rápido, usar siempre)</span>
+    <span class="kw">byte</span>[] buffer = <span class="kw">new byte</span>[<span class="num">4096</span>];          <span class="cm">// 4 KB de buffer</span>
+    <span class="kw">int</span> bytesLeidos;
+    <span class="kw">while</span> (original.available() &gt; <span class="num">0</span>) {
+        bytesLeidos = original.read(buffer);   <span class="cm">// lee hasta 4096 bytes</span>
+        copia.write(buffer, <span class="num">0</span>, bytesLeidos);  <span class="cm">// escribe solo los leídos</span>
+    }
+
+    copia.close();
+    original.close();
+} <span class="kw">catch</span> (IOException e) {
+    System.err.println(<span class="str">"Error: "</span> + e.getMessage());
+}</pre>
+      <div class="tip">Usar buffer de 4096 bytes es ~4000× más rápido que leer byte a byte. Usar siempre en copia de ficheros grandes.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Leer desde una URL — InputStream</div>
+      <pre><span class="kw">import</span> java.net.URL;
+<span class="kw">import</span> java.io.InputStream;
+
+<span class="kw">try</span> {
+    URL url = <span class="kw">new</span> URL(<span class="str">"https://www.ejemplo.com"</span>);
+    InputStream entrada = url.openStream();
+
+    <span class="kw">int</span> b = entrada.read();           <span class="cm">// read() devuelve int, -1 al acabar</span>
+    <span class="kw">while</span> (b != -<span class="num">1</span>) {
+        System.out.print((<span class="kw">char</span>) b);
+        b = entrada.read();
+    }
+    entrada.close();
+} <span class="kw">catch</span> (IOException e) {
+    System.out.println(<span class="str">"Error: "</span> + e.getMessage());
+}
+
+<span class="cm">// Mismo InputStream que FileInputStream pero conectado a una URL</span>
+<span class="cm">// read() devuelve -1 (no lanza excepción) al acabar el stream</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">available() — bytes restantes estimados</div>
+      <pre><span class="cm">// FileInputStream.available() → bytes que quedan por leer</span>
+<span class="kw">while</span> (stream.available() &gt; <span class="num">0</span>) { ... }
+
+<span class="cm">// ObjectInputStream.available() → puede no ser fiable para objetos</span>
+<span class="cm">// Para primitivos funciona, para objetos usar EOFException</span>
+
+<span class="cm">// URL InputStream → no tiene available() fiable</span>
+<span class="cm">// Usar el patrón read() != -1</span>
+<span class="kw">int</span> b;
+<span class="kw">while</span> ((b = stream.read()) != -<span class="num">1</span>) {
+    System.out.print((<span class="kw">char</span>) b);
+}</pre>
+    </div>
+  </div>
+
+  <!-- B6 TEXTO VS BINARIO -->
+  <div id="b6" class="inner-section">
+    <div class="card">
+      <div class="card-title">Fichero de texto vs fichero binario — diferencias</div>
+      <div class="mref">
+        <div class="mref-row"><span class="mref-name">Texto (.txt)</span><span class="mref-desc">Legible con cualquier editor. Usa FileReader/BufferedReader. Pierde precisión en doubles.</span></div>
+        <div class="mref-row"><span class="mref-name">Binario (.dat .bin)</span><span class="mref-desc">No legible directamente. Usa ObjectOutputStream/InputStream. Guarda el valor exacto.</span></div>
+        <div class="mref-row"><span class="mref-name">¿Cuándo texto?</span><span class="mref-desc">Configuración, logs, CSV, ficheros que el usuario editará manualmente.</span></div>
+        <div class="mref-row"><span class="mref-name">¿Cuándo binario?</span><span class="mref-desc">Objetos completos, arrays, datos numéricos con precisión exacta, mayor rendimiento.</span></div>
+      </div>
+      <pre style="margin-top:10px"><span class="cm">// Texto: todo se convierte a String</span>
+escritor.write(<span class="str">"3.14"</span>);            <span class="cm">// guarda los caracteres '3','.','1','4'</span>
+
+<span class="cm">// Binario: guarda la representación exacta en memoria</span>
+oos.writeDouble(<span class="num">3.14</span>);            <span class="cm">// guarda 8 bytes exactos del double</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Resumen de clases por tipo de operación</div>
+      <table class="stbl">
+        <thead><tr><th>Operación</th><th>Texto</th><th>Binario</th></tr></thead>
+        <tbody>
+          <tr><td>Leer líneas</td><td>BufferedReader + FileReader</td><td>—</td></tr>
+          <tr><td>Escribir líneas</td><td>BufferedWriter + FileWriter</td><td>—</td></tr>
+          <tr><td>Leer char a char</td><td>FileReader</td><td>—</td></tr>
+          <tr><td>Leer primitivos</td><td>parsear String</td><td>ObjectInputStream</td></tr>
+          <tr><td>Escribir primitivos</td><td>toString + write</td><td>ObjectOutputStream</td></tr>
+          <tr><td>Leer/escribir objetos</td><td>—</td><td>ObjectInputStream/OutputStream</td></tr>
+          <tr><td>Copiar cualquier fichero</td><td>FileReader+Writer</td><td>FileInputStream+OutputStream + buffer</td></tr>
+          <tr><td>Leer URL</td><td>—</td><td>URL.openStream() + InputStream</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- B7 ERRORES COMUNES -->
+  <div id="b7" class="inner-section">
+    <div class="card">
+      <div class="card-title">Crear ObjectOutputStream dentro del bucle</div>
+      <pre><span class="cm">// INCORRECTO — sobreescribe la cabecera en cada iteración → fichero corrupto</span>
+<span class="kw">while</span> (numero &gt; <span class="num">0</span>) {
+    ObjectOutputStream oos = <span class="kw">new</span> ObjectOutputStream(
+                                 <span class="kw">new</span> FileOutputStream(<span class="str">"nums.dat"</span>));
+    oos.writeInt(numero);
+    numero = sc.nextInt();
+}
+
+<span class="cm">// CORRECTO — crear fuera del bucle, una sola vez</span>
+ObjectOutputStream oos = <span class="kw">new</span> ObjectOutputStream(
+                             <span class="kw">new</span> FileOutputStream(<span class="str">"nums.dat"</span>));
+<span class="kw">while</span> (numero &gt; <span class="num">0</span>) {
+    oos.writeInt(numero);
+    numero = sc.nextInt();
+}
+oos.close();</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Leer en orden distinto al de escritura</div>
+      <pre><span class="cm">// Escritura</span>
+oos.writeDouble(<span class="num">3.14</span>);
+oos.writeInt(<span class="num">42</span>);
+oos.writeUTF(<span class="str">"Hola"</span>);
+
+<span class="cm">// INCORRECTO — orden distinto → datos incorrectos o excepción</span>
+<span class="kw">int</span>    n = ois.readInt();      <span class="cm">// lee los bytes del double como int</span>
+<span class="kw">double</span> d = ois.readDouble();
+
+<span class="cm">// CORRECTO — mismo orden</span>
+<span class="kw">double</span> d = ois.readDouble();
+<span class="kw">int</span>    n = ois.readInt();
+String s  = ois.readUTF();</pre>
+      <div class="err">Los datos binarios no tienen etiquetas. Si lees en orden distinto al que escribiste, obtendrás basura o una excepción.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">readObject sin cast ni throws ClassNotFoundException</div>
+      <pre><span class="cm">// INCORRECTO — readObject() devuelve Object, sin cast no se puede usar</span>
+<span class="kw">double</span>[] arr = ois.readObject();   <span class="cm">// error de compilación</span>
+
+<span class="cm">// CORRECTO — cast explícito</span>
+<span class="kw">double</span>[] arr = (<span class="kw">double</span>[]) ois.readObject();
+
+<span class="cm">// readObject también lanza ClassNotFoundException</span>
+<span class="cm">// El método debe declararlo o capturarlo</span>
+<span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> ClassNotFoundException { ... }
+<span class="cm">// o capturarlo en un catch separado</span>
+<span class="kw">catch</span> (ClassNotFoundException e) {
+    System.out.println(<span class="str">"Clase no encontrada: "</span> + e.getMessage());
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Clase no Serializable con writeObject</div>
+      <pre><span class="cm">// INCORRECTO — MiClase no implementa Serializable</span>
+<span class="kw">public class</span> MiClase { ... }
+oos.writeObject(<span class="kw">new</span> MiClase());  <span class="cm">// NotSerializableException en ejecución</span>
+
+<span class="cm">// CORRECTO</span>
+<span class="kw">public class</span> MiClase <span class="kw">implements</span> java.io.Serializable {
+    <span class="cm">// todos los atributos también deben ser Serializable</span>
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-title">Usar extensión .txt para ficheros binarios</div>
+      <pre><span class="cm">// No es error técnico, pero es confuso y mala práctica</span>
+<span class="kw">new</span> FileOutputStream(<span class="str">"numeros.txt"</span>);  <span class="cm">// binario con extensión de texto</span>
+
+<span class="cm">// Usar extensiones adecuadas:</span>
+<span class="cm">// .dat → datos binarios genéricos</span>
+<span class="cm">// .bin → fichero binario</span>
+<span class="cm">// .ser → objeto serializado</span>
+<span class="kw">new</span> FileOutputStream(<span class="str">"numeros.dat"</span>);  <span class="cm">// correcto</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-title">write(buffer) sin indicar bytes leídos</div>
+      <pre><span class="cm">// INCORRECTO — escribe siempre 4096 bytes aunque solo leyera 100</span>
+<span class="kw">byte</span>[] buffer = <span class="kw">new byte</span>[<span class="num">4096</span>];
+<span class="kw">while</span> (original.available() &gt; <span class="num">0</span>) {
+    original.read(buffer);
+    copia.write(buffer);       <span class="cm">// escribe basura al final</span>
+}
+
+<span class="cm">// CORRECTO — indicar exactamente cuántos bytes escribir</span>
+<span class="kw">int</span> leidos;
+<span class="kw">while</span> (original.available() &gt; <span class="num">0</span>) {
+    leidos = original.read(buffer);
+    copia.write(buffer, <span class="num">0</span>, leidos);  <span class="cm">// solo los leidos</span>
+}</pre>
+    </div>
+  </div>
+
+</div><!-- /binarios -->
+
+<script>
+function showTopic(id, btn) {
+  document.querySelectorAll('.topic-section').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+
+function showInner(topic, id, btn) {
+  const parent = document.getElementById(topic);
+  parent.querySelectorAll('.inner-section').forEach(s => s.classList.remove('on'));
+  parent.querySelectorAll('.inner-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>
